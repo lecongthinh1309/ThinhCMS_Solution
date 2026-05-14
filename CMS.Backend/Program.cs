@@ -1,4 +1,12 @@
+﻿using Microsoft.EntityFrameworkCore;
+using CMS.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// 1. Đăng ký DbContext vào hệ thống (Bước "cắm điện" kết nối Database)
+// Dòng này giúp Controller có thể gọi được Database thông qua Dependency Injection
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
