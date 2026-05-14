@@ -13,10 +13,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CMS.Backend.styles.css" asp-append-version="true" />
+
+    <!-- 1. QUAN TRỌNG: Dòng này dùng để nhận CSS từ các View như Index của Post -->
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom shadow-sm mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom shadow-sm mb-4">
             <div class="container-fluid">
                 <a class="navbar-brand text-primary" asp-area="" asp-controller="Home" asp-action="Index">
                     <span class="fw-bold">CMS</span>.Backend
@@ -30,16 +33,23 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
-                        <!-- Mục Category vừa thêm -->
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Category" asp-action="Index">Danh mục</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Post" asp-action="Index">Bài viết</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Bảo mật</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Người dùng</a>
+                        </li>
+
                     </ul>
-                    <div class="d-flex">
-                        <span class="text-muted small">Chào mừng bạn!</span>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-light text-dark border me-2">Lê Công Thịnh</span>
+                        <span class="text-muted small">2123110063</span>
                     </div>
                 </div>
             </div>
@@ -54,11 +64,11 @@
         </main>
     </div>
 
-    <footer class="footer border-top text-muted">
+    <footer class="footer border-top text-muted bg-white">
         <div class="container d-flex justify-content-between align-items-center">
             <span>&copy; 2026 - <span class="fw-semibold">Cao đẳng Công Thương TPHCM</span></span>
             <div class="footer-links">
-                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted">Privacy</a>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted">Privacy Policy</a>
             </div>
         </div>
     </footer>
@@ -66,6 +76,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- 2. QUAN TRỌNG: Dòng này dùng để nhận các đoạn Script từ View -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

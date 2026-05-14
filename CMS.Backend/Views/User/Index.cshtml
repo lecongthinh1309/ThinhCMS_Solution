@@ -1,0 +1,62 @@
+﻿@model IEnumerable<CMS.Data.Entities.User>
+
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark text-uppercase">Quản lý thành viên</h2>
+        <button class="btn btn-success shadow-sm">
+            <i class="bi bi-person-plus-fill"></i> + Thêm thành viên mới
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4" style="width: 80px;">ID</th>
+                            <th>Tên Đăng Nhập</th>
+                            <th>Họ Và Tên</th>
+                            <th>Quyền Hạn</th>
+                            <th class="text-center">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">@user.Id</td>
+                                <td class="fw-bold">@user.Username</td>
+                                <td>@user.FullName</td>
+                                <td>
+                                    @if (user.Role == "Administrator")
+                                    {
+                                        <span class="badge bg-danger px-3 py-2">Administrator</span>
+                                    }
+                                    else if (user.Role == "Editor")
+                                    {
+                                        <span class="badge bg-info text-white px-3 py-2">Editor</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary px-3 py-2">@user.Role</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-outline-warning btn-sm mx-1">Sửa</button>
+                                        <button class="btn btn-outline-danger btn-sm mx-1">Xóa</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CMS.Data.Entities.Post>
+
+@{
+    ViewData["Title"] = "Danh sách bài viết";
+}
+
+<div class="container mt-4">
+    <h1 class="text-danger text-center mb-5 fw-bold" style="text-transform: uppercase;">
+        Danh sách bài viết mới nhất
+    </h1>
+
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden post-card">
+                    <img src="@item.ImageUrl" class="card-img-top" alt="Thumbnail">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary fw-bold mb-3">
+                            @item.Title
+                        </h5>
+                        <p class="card-text text-muted small">
+                            @item.Content
+                        </p>
+                        <p class="text-muted mb-4" style="font-size: 0.85rem;">
+                            Ngày đăng: @item.CreatedDate.ToString("dd/MM/yyyy")
+                        </p>
+                        <a href="#" class="btn btn-outline-primary btn-sm px-3">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .post-card {
+            transition: transform 0.3s ease;
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+        }
+        .card-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3rem;
+        }
+    </style>
+}
