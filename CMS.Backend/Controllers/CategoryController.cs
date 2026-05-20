@@ -80,5 +80,36 @@ namespace CMS.Backend.Controllers
             }
             return View(category);
         }
+
+        // Giao diện Xóa
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (category == null)
+                return NotFound();
+
+            return View(category);
+        }
+
+        // Xử lý Xóa
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
