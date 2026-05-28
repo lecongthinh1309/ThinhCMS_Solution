@@ -1,23 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CMS.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Đăng ký DbContext vào hệ thống (Bước "cắm điện" kết nối Database)
-// Dòng này giúp Controller có thể gọi được Database thông qua Dependency Injection
+// 1. Kết nối Cơ sở dữ liệu SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// 2. 🌟 KHẮC PHỤC LỖI MÀN HÌNH XANH: Đăng ký dịch vụ xác thực bằng Cookie
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";         // Chưa đăng nhập thì đá về đây
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Sai quyền (Role) thì đá về đây
+    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -26,6 +31,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// 3. 🌟 KÍCH HOẠT MIDDLEWARE (Lưu ý: UseAuthentication phải đứng TRƯỚC UseAuthorization)
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

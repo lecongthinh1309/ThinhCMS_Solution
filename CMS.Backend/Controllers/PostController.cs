@@ -1,10 +1,9 @@
 ﻿/*
  * Sinh vien: Le Cong Thinh
  * MSSV: 2123110063
- * Ngay tao:14-05-2026
- * Version: 1.0
- * 
- */
+ * Ngay tao: 14-05-2026
+ * Version: 1.1 - Đã cập nhật phân quyền chi tiết cho từng Action
+ * */
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,9 +14,11 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CMS.Backend.Controllers
 {
+    [Authorize] // Bắt buộc phải đăng nhập tài khoản bất kỳ mới được vào trang này
     public class PostController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,16 +29,14 @@ namespace CMS.Backend.Controllers
         }
 
         // ===================================================
-        // 1. CHỨC NĂNG: TRANG DANH SÁCH BÀI VIẾT (INDEX)
+        // 1. CHỨC NĂNG: TRANG DANH SÁCH BÀI VIẾT (INDEX) - Ai đăng nhập cũng được xem
         // ===================================================
-        // Tham số 'id' (CategoryId) nhận vào từ URL tùy chọn (ví dụ: /Post/Index hoặc /Post/Index/5)
         public IActionResult Index(int? id)
         {
             List<Post> data;
 
             if (id == null)
             {
-                // 1.1. Nếu không có id danh mục: Lấy TOÀN BỘ bài viết hệ thống
                 data = _context.Posts
                                .Include(p => p.Category)
                                .OrderByDescending(p => p.Id)
@@ -46,34 +45,28 @@ namespace CMS.Backend.Controllers
             }
             else
             {
-                // 1.2. Nếu có id danh mục: Tiến hành lọc bài viết theo CategoryId bằng LINQ
                 data = _context.Posts
                                .Where(p => p.CategoryId == id)
                                .Include(p => p.Category)
                                .OrderByDescending(p => p.CreatedDate)
                                .ToList();
 
-                // Lấy thêm tên danh mục hiện tại để hiển thị ra ngoài giao diện tiêu đề bài viết
                 var cat = _context.Categories.Find(id);
                 ViewBag.CurrentCategoryName = cat != null ? "Danh mục: " + cat.Name : "Danh mục không tồn tại";
             }
 
-            // Gửi dữ liệu ra View hiển thị
             return View(data);
         }
 
         // ===================================================
-        // 1.3. CHỨC NĂNG: XEM CHI TIẾT BÀI VIẾT (DETAILS)
+        // 1.3. CHỨC NĂNG: XEM CHI TIẾT BÀI VIẾT (DETAILS) - Ai đăng nhập cũng được xem
         // ===================================================
-        // Đường dẫn gọi đến hệ thống: /Post/Details/5
         public IActionResult Details(int id)
         {
-            // Tìm bài viết theo Id và nạp kèm thông tin danh mục liên kết (Include)
             var post = _context.Posts
                                .Include(p => p.Category)
                                .FirstOrDefault(p => p.Id == id);
 
-            // Nếu không tìm thấy bài viết, đá lỗi về trang không tìm thấy 404
             if (post == null)
             {
                 return NotFound();
@@ -83,7 +76,7 @@ namespace CMS.Backend.Controllers
         }
 
         // ===================================================
-        // 2. CHỨC NĂNG: THÊM MỚI BÀI VIẾT (CREATE)
+        // 2. CHỨC NĂNG: THÊM MỚI BÀI VIẾT (CREATE) - Ai đăng nhập cũng được thêm bài
         // ===================================================
         public IActionResult Create()
         {
@@ -122,7 +115,9 @@ namespace CMS.Backend.Controllers
 
         // ===================================================
         // 3. CHỨC NĂNG: CHỈNH SỬA BÀI VIẾT (EDIT)
+        // 🌟 CHỈ CHO PHÉP ADMIN HOẶC EDITOR VÀO SỬA (AUTHOR SẼ BỊ CHẶN)
         // ===================================================
+        [Authorize(Roles = "Administrator,Editor")]
         public IActionResult Edit(int id)
         {
             var post = _context.Posts.Find(id);
@@ -132,12 +127,12 @@ namespace CMS.Backend.Controllers
             return View(post);
         }
 
+        [Authorize(Roles = "Administrator,Editor")]
         [HttpPost]
         public IActionResult Edit(Post post, IFormFile? imageFile)
         {
             try
             {
-                // Lấy thông tin bản ghi cũ trong database ra để so sánh hình ảnh
                 var existingPost = _context.Posts.AsNoTracking().FirstOrDefault(p => p.Id == post.Id);
                 if (existingPost == null) return NotFound();
 
@@ -156,10 +151,8 @@ namespace CMS.Backend.Controllers
                         imageFile.CopyTo(fileStream);
                     }
 
-                    // Gán đường dẫn file ảnh mới cho bài viết
                     post.ImageUrl = "/uploads/" + uniqueFileName;
 
-                    // KIỂM TRA & XÓA FILE ẢNH CŨ TRÊN Ổ CỨNG MÁY TÍNH ĐỂ TRÁNH RÁC THƯ MỤC UPLOADS
                     if (!string.IsNullOrEmpty(existingPost.ImageUrl))
                     {
                         var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingPost.ImageUrl.TrimStart('/'));
@@ -171,11 +164,9 @@ namespace CMS.Backend.Controllers
                 }
                 else
                 {
-                    // Nếu Khoa không chọn file ảnh mới, giữ nguyên đường dẫn ảnh cũ của bài viết đó
                     post.ImageUrl = existingPost.ImageUrl;
                 }
 
-                // Giữ lại ngày tạo gốc của bài viết
                 post.CreatedDate = existingPost.CreatedDate;
 
                 _context.Update(post);
@@ -191,13 +182,14 @@ namespace CMS.Backend.Controllers
 
         // ===================================================
         // 4. CHỨC NĂNG: XÓA BÀI VIẾT (DELETE)
+        // 🌟 CHỈ DUY NHẤT ADMIN MỚI CÓ QUYỀN XÓA (EDITOR VÀ AUTHOR SẼ BỊ ĐÁ VĂNG)
         // ===================================================
+        [Authorize(Roles = "Administrator")]
         public IActionResult Delete(int id)
         {
             var post = _context.Posts.Find(id);
             if (post != null)
             {
-                // XÓA FILE ẢNH VẬT LÝ KHỎI THƯ MỤC WWWROOT TRƯỚC KHI XÓA DỮ LIỆU TRONG SQL
                 if (!string.IsNullOrEmpty(post.ImageUrl))
                 {
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", post.ImageUrl.TrimStart('/'));

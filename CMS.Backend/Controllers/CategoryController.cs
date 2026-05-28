@@ -1,19 +1,20 @@
 ﻿/*
  * Sinh vien: Le Cong Thinh
  * MSSV: 2123110063
- * Ngay tao:14-05-2026
- * Version: 1.0
- * 
- */
-
+ * Ngay tao: 14-05-2026
+ * Version: 1.2
+ * */
 
 using Microsoft.AspNetCore.Mvc;
 using CMS.Data;
 using CMS.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CMS.Backend.Controllers
 {
+    // Cấp quyền cho cả Administrator và Editor vào xem/thêm danh mục
+    [Authorize(Roles = "Administrator,Editor")]
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,25 +24,24 @@ namespace CMS.Backend.Controllers
             _context = context;
         }
 
-        // Hiển thị danh sách
+        // Xem danh sách danh mục (Cả hai quyền đều vào được)
         public async Task<IActionResult> Index()
         {
             var data = await _context.Categories.ToListAsync();
             return View(data);
         }
 
-        // Giao diện Thêm mới
+        // Giao diện Thêm mới (Cả hai quyền đều vào được)
         public IActionResult Create()
         {
             return View();
         }
 
-        // Xử lý Thêm mới
+        // Xử lý Thêm mới (Cả hai quyền đều thêm được)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
         {
-            // Xóa kiểm tra ràng buộc với danh sách Posts để ModelState hợp lệ
             ModelState.Remove("Posts");
 
             if (ModelState.IsValid)
@@ -53,7 +53,11 @@ namespace CMS.Backend.Controllers
             return View(category);
         }
 
-        // Giao diện Chỉnh sửa
+        // ==========================================
+        // CHỈ ADMINISTRATOR MỚI ĐƯỢC SỬA VÀ XÓA
+        // ==========================================
+
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -64,9 +68,9 @@ namespace CMS.Backend.Controllers
             return View(category);
         }
 
-        // Xử lý Chỉnh sửa
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, Category category)
         {
             if (id != category.Id) return NotFound();
@@ -90,24 +94,22 @@ namespace CMS.Backend.Controllers
             return View(category);
         }
 
-        // Giao diện Xóa
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-                return NotFound();
+            if (id == null) return NotFound();
 
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (category == null)
-                return NotFound();
+            if (category == null) return NotFound();
 
             return View(category);
         }
 
-        // Xử lý Xóa
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
