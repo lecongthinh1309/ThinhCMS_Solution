@@ -1,0 +1,28 @@
+﻿@model CMS.Data.Entities.Post
+
+<div class="container mt-4">
+    <div class="card border-danger mx-auto" style="max-width: 500px;">
+        <div class="card-header bg-danger text-white"><h4>XÁC NHẬN XÓA BÀI VIẾT</h4></div>
+        <div class="card-body">
+            <p class="text-danger fw-bold">Bạn có chắc chắn muốn xóa bài viết này không? Hành động này không thể hoàn tác.</p>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Tiêu đề</th>
+                    <td>@Model.Title</td>
+                </tr>
+                <tr>
+                    <th>Danh mục</th>
+                    <td>@Model.Category?.Name</td>
+                </tr>
+            </table>
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between">
+                    <a href="/Post" class="btn btn-secondary">Hủy</a>
+                    <button type="submit" class="btn btn-danger">Xóa thực sự</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@model CMS.Data.Entities.Post
+
+@{
+    ViewData["Title"] = "Chi tiết bài viết";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm mx-auto border-0 rounded-3 overflow-hidden" style="max-width: 800px;">
+        <img src="@Model.ImageUrl" class="card-img-top w-100" alt="Thumbnail" style="max-height: 420px; object-fit: cover;">
+
+        <div class="card-body p-4">
+            <span class="badge bg-info text-dark mb-2 fs-6 px-3">
+                @Model.Category?.Name
+            </span>
+
+            <h2 class="card-title text-primary fw-bold mb-3" style="height: auto; display: block;">
+                @Model.Title
+            </h2>
+
+            <p class="text-muted small d-flex align-items-center gap-1 mb-4">
+                Ngày đăng bài: @Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+            </p>
+
+            <hr class="text-muted" />
+
+            <div class="card-text text-dark lh-lg fs-5" style="height: auto; display: block; white-space: pre-line;">
+                @Model.Content
+            </div>
+
+            <div class="d-flex gap-2 mt-5 pt-3 border-top">
+                <a href="/Post/Edit/@Model.Id" class="btn btn-warning px-4 fw-bold text-dark">Chỉnh sửa bài</a>
+                <a href="/Post" class="btn btn-secondary px-4">Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>

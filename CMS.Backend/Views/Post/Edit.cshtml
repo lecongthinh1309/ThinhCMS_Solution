@@ -1,0 +1,49 @@
+﻿@model CMS.Data.Entities.Post
+
+@{
+    ViewData["Title"] = "Chỉnh sửa bài viết";
+}
+
+<div class="container mt-4">
+    <div class="card shadow mx-auto" style="max-width: 650px;">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0 fw-bold">CHỈNH SỬA BÀI VIẾT</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Danh mục bài viết</label>
+                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories" required></select>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-bold">Tiêu đề bài viết</label>
+                    <input asp-for="Title" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Hình ảnh hiện tại</label>
+                    <div class="mb-2">
+                        <img src="@Model.ImageUrl" class="img-thumbnail rounded shadow-sm" style="max-height: 120px;" alt="Current Image" />
+                    </div>
+                    <label class="form-label fw-bold text-primary">Thay đổi hình ảnh mới (Để trống nếu giữ nguyên)</label>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Content" class="form-label fw-bold">Nội dung bài viết</label>
+                    <textarea asp-for="Content" class="form-control" rows="6" required></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/Post" class="btn btn-secondary px-4">Quay lại</a>
+                    <button type="submit" class="btn btn-warning px-4 fw-bold text-dark">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

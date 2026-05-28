@@ -1,0 +1,52 @@
+﻿@model CMS.Data.Entities.User
+
+@{
+    ViewData["Title"] = "Chỉnh sửa thành viên";
+}
+
+<div class="container mt-4">
+    <div class="card shadow border-0 mx-auto rounded-3" style="max-width: 600px;">
+        <div class="card-header bg-warning text-dark fw-bold py-3">
+            <h5 class="mb-0 text-uppercase"><i class="bi bi-pencil-square"></i> Chỉnh sửa thành viên</h5>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label fw-bold text-dark">Tên Đăng Nhập</label>
+                    <input asp-for="Username" class="form-control py-2 bg-light" readonly />
+                    <div class="form-text text-muted">Không được phép thay đổi tên tài khoản đăng nhập.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label fw-bold text-dark">Họ Và Tên</label>
+                    <input asp-for="FullName" class="form-control py-2" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-primary">Mật Khẩu Mới</label>
+                    <input type="password" name="NewPassword" class="form-control py-2" placeholder="Để trống nếu muốn giữ nguyên mật khẩu cũ..." />
+                    <span class="text-danger small">@Html.ValidationMessage("NewPassword")</span>
+                    <div class="form-text text-muted">Chỉ nhập khi bạn cần đặt lại mật khẩu mới cho thành viên này.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Role" class="form-label fw-bold text-dark">Quyền Hạn Hệ Thống</label>
+                    <select asp-for="Role" class="form-select py-2" required>
+                        <option value="Administrator">Administrator</option>
+                        <option value="Editor">Editor</option>
+                        <option value="Author">Author</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4 border-top pt-3">
+                    <a href="/User" class="btn btn-secondary px-4 py-2">Quay Lại</a>
+                    <button type="submit" class="btn btn-warning px-4 py-2 fw-bold text-dark">Cập Nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * Sinh vien: Le Cong Thinh
+ * MSSV: 2123110063
+ * Ngay tao:14-05-2026
+ * Version: 1.0
+ * 
+ */
+
+
+using Microsoft.AspNetCore.Mvc;
 using CMS.Data;
 using CMS.Data.Entities;
 using Microsoft.EntityFrameworkCore;
