@@ -2,7 +2,7 @@
  * Sinh vien: Le Cong Thinh
  * MSSV: 2123110063
  * Ngay tao: 14-05-2026
- * Version: 1.1 - Đã cập nhật phân quyền chi tiết cho từng Action
+ * Version: 1.2 - Tích hợp thêm luồng dữ liệu API cho Buổi 6
  * */
 
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +27,78 @@ namespace CMS.Backend.Controllers
         {
             _context = context;
         }
+
+        // =================================================================
+        // 🌟 PHẦN MỚI THÊM: ĐƯỜNG DẪN API CHO BUỔI 6 (HIỂN THỊ TRÊN SWAGGER)
+        // =================================================================
+
+        // 1. API: Lấy toàn bộ bài viết (Không lấy trường Content để nhẹ băng thông - Đúng ảnh test số 2)
+        [HttpGet("api/Posts")]
+        [AllowAnonymous] // Cho phép gọi API từ bên ngoài mà không cần qua cổng Cookie đăng nhập
+        public async Task<IActionResult> GetAllApi()
+        {
+            var posts = await _context.Posts
+                .OrderByDescending(p => p.Id)
+                .Select(p => new {
+                    p.Id,
+                    p.Title,
+                    p.ImageUrl,
+                    CreatedDate = p.CreatedDate,
+                    CategoryName = p.Category != null ? p.Category.Name : "Chưa phân loại"
+                })
+                .ToListAsync();
+
+            return Ok(posts);
+        }
+
+        // 2. API: Lọc bài viết theo Id của danh mục bài viết (Đúng ảnh test số 1)
+        [HttpGet("api/Posts/category/{categoryId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByCategoryApi(int categoryId)
+        {
+            var posts = await _context.Posts
+                .Where(p => p.CategoryId == categoryId)
+                .Select(p => new {
+                    p.Id,
+                    p.Title,
+                    p.ImageUrl,
+                    CreatedDate = p.CreatedDate,
+                    CategoryName = p.Category != null ? p.Category.Name : "Chưa phân loại"
+                })
+                .ToListAsync();
+
+            return Ok(posts);
+        }
+
+        // 3. API: Xem chi tiết bài viết (Bắt buộc phải lôi trường [Content] ra - Đúng ảnh test số 3)
+        [HttpGet("api/Posts/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetDetailApi(int id)
+        {
+            var post = await _context.Posts
+                .Where(p => p.Id == id)
+                .Select(p => new {
+                    p.Id,
+                    p.Title,
+                    p.Content, // Trả về nội dung chi tiết bài viết ở đây
+                    p.ImageUrl,
+                    CreatedDate = p.CreatedDate,
+                    p.CategoryId,
+                    Category = p.Category
+                })
+                .FirstOrDefaultAsync();
+
+            if (post == null)
+            {
+                return NotFound(new { message = "Không tìm thấy bài viết này trong hệ thống" });
+            }
+
+            return Ok(post);
+        }
+
+        // =================================================================
+        // 📦 PHẦN CŨ: GIỮ NGUYÊN 100% CODE GIAO DIỆN WEB MVC CỦA BUỔI 5
+        // =================================================================
 
         // ===================================================
         // 1. CHỨC NĂNG: TRANG DANH SÁCH BÀI VIẾT (INDEX) - Ai đăng nhập cũng được xem

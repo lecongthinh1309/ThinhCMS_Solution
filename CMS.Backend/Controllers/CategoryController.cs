@@ -10,10 +10,12 @@ using CMS.Data;
 using CMS.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace CMS.Backend.Controllers
 {
-    // Cấp quyền cho cả Administrator và Editor vào xem/thêm danh mục
+    // Cấp quyền cho cả Administrator và Editor vào xem/thêm danh mục giao diện Web
     [Authorize(Roles = "Administrator,Editor")]
     public class CategoryController : Controller
     {
@@ -23,6 +25,30 @@ namespace CMS.Backend.Controllers
         {
             _context = context;
         }
+
+        // =================================================================
+        // 🌟 PHẦN 1: ĐƯỜNG DẪN API CHO BUỔI 6 (MỚI THÊM VÀO ĐỂ HIỆN SWAGGER)
+        // =================================================================
+        [HttpGet("api/Categories")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllApi()
+        {
+            var categories = await _context.Categories
+                .OrderBy(c => c.Id) // ✨ ĐỔI SANG SẮP XẾP THEO ID ĐỂ KHÔNG BỊ BÁO LỖI NỮA
+                .Select(c => new {
+                    c.Id,
+                    c.Name,
+                    c.Description
+                    // Đã bỏ DisplayOrder và IsActive vì Entity Category của em không có các trường này
+                })
+                .ToListAsync();
+
+            return Ok(categories);
+        }
+
+        // =================================================================
+        // 📦 PHẦN 2: GIỮ NGUYÊN 100% TOÀN BỘ CODE GIAO DIỆN CŨ CỦA BUỔI 5
+        // =================================================================
 
         // Xem danh sách danh mục (Cả hai quyền đều vào được)
         public async Task<IActionResult> Index()

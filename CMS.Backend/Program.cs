@@ -4,21 +4,43 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Kết nối Cơ sở dữ liệu SQL Server
+// ==============================================================
+// 1. KHU VỰC ĐĂNG KÝ DỊCH VỤ (SERVICES CONTAINER)
+// ==============================================================
+
+// 1.1. Kết nối Cơ sở dữ liệu SQL Server (Buổi 5)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// 1.2. Đăng ký nhận diện Controller kèm cả View .cshtml (Hybrid Architecture)
 builder.Services.AddControllersWithViews();
 
-// 2. 🌟 KHẮC PHỤC LỖI MÀN HÌNH XANH: Đăng ký dịch vụ xác thực bằng Cookie
+// 1.3. Đăng ký dịch vụ lõi Swagger phục vụ kiểm thử giao diện API (Mới - Buổi 6)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// 1.4. Đăng ký chính sách CORS - Mở cổng kết nối bảo mật cho ReactJS (Mới - Buổi 6)
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll", policy => {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// 1.5. Đăng ký dịch vụ xác thực bằng Cookie (Bảo mật - Buổi 5)
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";         // Chưa đăng nhập thì đá về đây
+        options.LoginPath = "/Account/Login";               // Chưa đăng nhập thì đá về đây
         options.AccessDeniedPath = "/Account/AccessDenied"; // Sai quyền (Role) thì đá về đây
     });
 
 var app = builder.Build();
+
+// ==============================================================
+// 2. KHU VỰC CẤU HÌNH MIDDLEWARE (REQUEST PIPELINE)
+// ==============================================================
 
 if (!app.Environment.IsDevelopment())
 {
@@ -31,10 +53,29 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// 3. 🌟 KÍCH HOẠT MIDDLEWARE (Lưu ý: UseAuthentication phải đứng TRƯỚC UseAuthorization)
+// 🌟 VỊ TRÍ QUAN TRỌNG: Kích hoạt CORS ngay sau UseRouting và TRƯỚC các tầng bảo mật
+app.UseCors("AllowAll");
+
+// Kích hoạt Middleware bảo mật xác thực danh tính và phân quyền (Giữ đúng thứ tự Buổi 5)
 app.UseAuthentication();
 app.UseAuthorization();
 
+// 🌟 Kích hoạt Swagger UI làm môi trường chạy thử nghiệm API (Mới - Buổi 6)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CMS Web API v1");
+    c.RoutePrefix = "swagger"; // Đường dẫn truy cập trực tiếp sẽ là /swagger
+});
+
+// ===============================================================
+// 3. KHU VỰC ĐỊNH TUYẾN PHÂN LUỒNG (ROUTING MAP)
+// ===============================================================
+
+// Phân luồng A: Ánh xạ các Endpoint API ngầm tuân thủ cấu trúc [Route("api/[controller]")] (Mới - Buổi 6)
+app.MapControllers();
+
+// Phân luồng B: Giữ bản đồ đường đi mặc định hiển thị trang giao diện Web MVC cũ (Buổi 5)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
