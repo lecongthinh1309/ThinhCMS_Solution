@@ -1,43 +1,520 @@
 ﻿@{
-    Layout = null; 
+    Layout = null;
 }
 
-<!DOCTYPEDOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập hệ thống</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            perspective: 1000px;
+        }
+
+        /* ==================== CARD & HEADER ==================== */
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0; /* Cho hiệu ứng JS xuất hiện ban đầu */
+        }
+
+            .login-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+                transition: left 0.5s ease;
+            }
+
+            .login-card:hover::before {
+                left: 100%;
+            }
+
+            .login-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+            .login-header h2 {
+                color: white;
+                font-size: 2rem;
+                font-weight: 700;
+                margin-bottom: 8px;
+                background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .login-header p {
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 1rem;
+                font-weight: 400;
+            }
+
+        /* ==================== FORM GROUP & INPUT ==================== */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .input-wrapper input {
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                padding: 16px 16px 8px 16px;
+                color: white;
+                font-size: 16px;
+                font-weight: 400;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                width: 100%;
+                outline: none;
+                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(10px);
+            }
+
+                .input-wrapper input::placeholder {
+                    color: transparent;
+                }
+
+            .input-wrapper label {
+                position: absolute;
+                left: 16px;
+                top: 16px;
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 16px;
+                font-weight: 400;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                pointer-events: none;
+                transform-origin: left top;
+            }
+
+            .input-wrapper input:focus,
+            .input-wrapper input:valid {
+                border-color: #06b6d4;
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(6, 182, 212, 0.2);
+            }
+
+                .input-wrapper input:focus + label,
+                .input-wrapper input:valid + label {
+                    transform: translateY(-8px) scale(0.85);
+                    color: #06b6d4;
+                    font-weight: 500;
+                }
+
+        .focus-border {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #06b6d4, #6366f1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .input-wrapper input:focus ~ .focus-border {
+            width: 100%;
+        }
+
+        /* Password Toggle */
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+
+            .password-toggle:hover {
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+        .eye-icon {
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.6)' stroke-width='1.5'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3e%3c/svg%3e");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: background-image 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+            .eye-icon.show-password {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.6)' stroke-width='1.5'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 11-4.243-4.243m4.242 4.242L9.88 9.88'/%3e%3c/svg%3e");
+            }
+
+        /* Error Message & ViewBag Error */
+        .error-message {
+            display: block;
+            color: #ef4444;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 6px;
+            margin-left: 4px;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Form Options (Remember Me / Forgot Password) */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .remember-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+            .remember-wrapper input[type="checkbox"] {
+                display: none;
+            }
+
+        .checkbox-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .remember-wrapper input[type="checkbox"]:checked ~ .checkbox-label .checkmark {
+            background: #06b6d4;
+            border-color: #06b6d4;
+            transform: scale(1.1);
+        }
+
+            .remember-wrapper input[type="checkbox"]:checked ~ .checkbox-label .checkmark::after {
+                content: '✓';
+                color: white;
+                font-size: 11px;
+                font-weight: bold;
+                animation: checkmarkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+
+        .forgot-password {
+            color: #06b6d4;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+            .forgot-password::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 1px;
+                background: #06b6d4;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .forgot-password:hover::after {
+                width: 100%;
+            }
+
+            .forgot-password:hover {
+                color: white;
+            }
+
+        /* ==================== BUTTON ==================== */
+        .btn {
+            background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin-top: 8px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+            }
+
+            .btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                transition: left 0.5s ease;
+            }
+
+            .btn:hover::before {
+                left: 100%;
+            }
+
+            .btn.loading {
+                pointer-events: none;
+            }
+
+        .btn-text {
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: spin 1s linear infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn.loading .btn-text {
+            opacity: 0;
+        }
+
+        .btn.loading .btn-loader {
+            opacity: 1;
+        }
+
+        /* ==================== KEYFRAMES ==================== */
+        @@keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @@keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        @@keyframes checkmarkPop {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @@media (max-width: 480px) {
+            .login-card {
+                padding: 24px;
+                margin: 10px;
+            }
+
+            .login-header h2 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card shadow border-0">
-                    <div class="card-header bg-primary text-white text-center py-3">
-                        <h5 class="mb-0">HỆ THỐNG QUẢN TRỊ CMS</h5>
+<body>
+    <div class="login-container">
+        <div class="login-card" id="loginCard">
+            <div class="login-header">
+                <h2>Chào mừng trở lại</h2>
+                <p>Đăng nhập vào hệ thống</p>
+            </div>
+
+            <form asp-action="Login" method="post" id="loginForm" class="login-form">
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="error-message" style="margin-bottom: 20px;">
+                        @ViewBag.Error
                     </div>
-                    <div class="card-body p-4">
-                        <form asp-action="Login" method="post">
-                            <div class="mb-3">
-                                <label class="form-label">Tên đăng nhập</label>
-                                <input type="text" name="username" class="form-control" required />
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Mật khẩu</label>
-                                <input type="password" name="password" class="form-control" required />
-                            </div>
+                }
 
-                            @if (ViewBag.Error != null)
-                            {
-                                <div class="alert alert-danger py-2">@ViewBag.Error</div>
-                            }
-
-                            <button type="submit" class="btn btn-primary w-100">ĐĂNG NHẬP</button>
-                        </form>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" required autocomplete="username">
+                        <label for="username">Tên đăng nhập</label>
+                        <span class="focus-border"></span>
                     </div>
                 </div>
-            </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper password-wrapper">
+                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                        <label for="password">Mật khẩu</label>
+                        <button type="button" class="password-toggle" id="passwordToggle" aria-label="Hiện/Ẩn mật khẩu">
+                            <span class="eye-icon" id="eyeIcon"></span>
+                        </button>
+                        <span class="focus-border"></span>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-wrapper">
+                        <input type="checkbox" id="remember" name="remember">
+                        <span class="checkbox-label">
+                            <span class="checkmark"></span>
+                            Nhớ mật khẩu
+                        </span>
+                    </label>
+                    <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">
+                    <span class="btn-text">ĐĂNG NHẬP</span>
+                    <span class="btn-loader"></span>
+                </button>
+            </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Hiệu ứng xuất hiện mượt mà cho form
+            const card = document.getElementById('loginCard');
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+
+            // 2. Chức năng ẩn/hiện mật khẩu
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.getElementById('passwordToggle');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                eyeIcon.classList.toggle('show-password');
+            });
+
+            // 3. Hiệu ứng xoay tròn Loading khi Submit form
+            const loginForm = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            loginForm.addEventListener('submit', function() {
+                // Chỉ hiển thị loading nếu các trường đã được điền đủ (vượt qua HTML5 required)
+                if(loginForm.checkValidity()) {
+                    submitBtn.classList.add('loading');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

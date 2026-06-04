@@ -20,14 +20,14 @@ namespace CMS.Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            // Sắp xếp theo Id vì thực thể CategoryProduct không có trường DisplayOrder
+           
             var categories = await _context.CategoriesProducts
                 .OrderBy(c => c.Id)
                 .Select(c => new {
                     c.Id,
                     c.Name,
                     c.Description
-                    // Đã bỏ DisplayOrder và IsActive vì file Entity của em không có
+                   
                 })
                 .ToListAsync();
 
