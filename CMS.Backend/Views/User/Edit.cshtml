@@ -4,49 +4,51 @@
     ViewData["Title"] = "Chỉnh sửa thành viên";
 }
 
-<div class="container mt-4">
-    <div class="card shadow border-0 mx-auto rounded-3" style="max-width: 600px;">
-        <div class="card-header bg-warning text-dark fw-bold py-3">
-            <h5 class="mb-0 text-uppercase"><i class="bi bi-pencil-square"></i> Chỉnh sửa thành viên</h5>
+<div class="px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-zinc-900">Chỉnh sửa thành viên</h2>
+            <p class="mt-2 text-sm text-zinc-600">Cập nhật thông tin và quyền hạn của thành viên trong hệ thống.</p>
         </div>
-        <div class="card-body p-4">
-            <form asp-action="Edit" method="post">
-                @Html.AntiForgeryToken()
 
-                <input type="hidden" asp-for="Id" />
+        <form asp-action="Edit" method="post" class="bg-white border border-zinc-200 rounded-xl shadow-sm p-6 sm:p-8">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
 
-                <div class="mb-3">
-                    <label asp-for="Username" class="form-label fw-bold text-dark">Tên Đăng Nhập</label>
-                    <input asp-for="Username" class="form-control py-2 bg-light" readonly />
-                    <div class="form-text text-muted">Không được phép thay đổi tên tài khoản đăng nhập.</div>
+            <div class="grid grid-cols-1 gap-6">
+                <div>
+                    <label asp-for="Username" class="block text-sm font-bold text-zinc-700 mb-2">Tên đăng nhập</label>
+                    <input asp-for="Username" class="w-full rounded-lg border-zinc-200 bg-zinc-50 shadow-sm py-2.5 px-3 border text-zinc-500 cursor-not-allowed" readonly />
+                    <p class="mt-1 text-xs text-zinc-500">Tên tài khoản không thể thay đổi.</p>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="FullName" class="form-label fw-bold text-dark">Họ Và Tên</label>
-                    <input asp-for="FullName" class="form-control py-2" required />
+                <div>
+                    <label asp-for="FullName" class="block text-sm font-bold text-zinc-700 mb-2">Họ và tên</label>
+                    <input asp-for="FullName" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" required />
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold text-primary">Mật Khẩu Mới</label>
-                    <input type="password" name="NewPassword" class="form-control py-2" placeholder="Để trống nếu muốn giữ nguyên mật khẩu cũ..." />
-                    <span class="text-danger small">@Html.ValidationMessage("NewPassword")</span>
-                    <div class="form-text text-muted">Chỉ nhập khi bạn cần đặt lại mật khẩu mới cho thành viên này.</div>
+                <div>
+                    <label class="block text-sm font-bold text-indigo-600 mb-2">Mật khẩu mới</label>
+                    <input type="password" name="NewPassword" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" placeholder="Để trống nếu muốn giữ nguyên..." />
+                    <p class="mt-1 text-xs text-zinc-500">Chỉ nhập khi cần thay đổi mật khẩu.</p>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Role" class="form-label fw-bold text-dark">Quyền Hạn Hệ Thống</label>
-                    <select asp-for="Role" class="form-select py-2" required>
+                <div>
+                    <label asp-for="Role" class="block text-sm font-bold text-zinc-700 mb-2">Quyền hạn</label>
+                    <select asp-for="Role" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" required>
                         <option value="Administrator">Administrator</option>
                         <option value="Editor">Editor</option>
                         <option value="Author">Author</option>
                     </select>
                 </div>
+            </div>
 
-                <div class="d-flex justify-content-between mt-4 border-top pt-3">
-                    <a href="/User" class="btn btn-secondary px-4 py-2">Quay Lại</a>
-                    <button type="submit" class="btn btn-warning px-4 py-2 fw-bold text-dark">Cập Nhật</button>
-                </div>
-            </form>
-        </div>
+            <div class="mt-8 flex items-center justify-end gap-3 border-t border-zinc-100 pt-6">
+                <a asp-action="Index" class="text-sm font-semibold text-zinc-600 hover:text-zinc-900">Hủy bỏ</a>
+                <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 transition-all">
+                    Cập nhật thành viên
+                </button>
+            </div>
+        </form>
     </div>
 </div>
