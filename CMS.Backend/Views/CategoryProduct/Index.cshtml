@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CMS.Data.Entities.CategoryProduct>
+
+@{
+    ViewData["Title"] = "Quản lý Danh mục Sản phẩm";
+}
+
+<div class="px-4 sm:px-6 lg:px-8">
+    @if (TempData["DeleteError"] != null)
+    {
+        <div class="mb-6 rounded-lg bg-rose-50 p-4 text-sm text-rose-700 border border-rose-200 flex items-center">
+            <i class="bi bi-exclamation-triangle-fill mr-2 text-lg"></i> @TempData["DeleteError"]
+        </div>
+    }
+
+    <div class="sm:flex sm:items-center justify-between mb-8">
+        <div>
+            <h2 class="text-2xl font-bold text-zinc-900">Danh mục sản phẩm</h2>
+            <p class="mt-2 text-sm text-zinc-600">Quản lý phân loại các dòng sản phẩm trong hệ thống.</p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <a asp-action="Create" class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-all">
+                <i class="bi bi-plus-lg mr-2"></i> Thêm danh mục mới
+            </a>
+        </div>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+        <table class="min-w-full divide-y divide-zinc-200">
+            <thead class="bg-zinc-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Mã số</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Tên danh mục</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Mô tả</th>
+                    <th class="px-6 py-4 text-center text-xs font-bold text-zinc-500 uppercase tracking-wider">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-200 bg-white">
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-zinc-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-zinc-900">#@item.Id</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-indigo-700">@item.Name</td>
+                        <td class="px-6 py-4 text-sm text-zinc-500 max-w-xs truncate">@item.Description</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <div class="flex justify-center gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-amber-600 hover:text-amber-800 bg-amber-50 px-3 py-1 rounded-md font-bold transition-all">Sửa</a>
+
+                                @if (User.IsInRole("Administrator"))
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id"
+                                       class="text-rose-600 hover:text-rose-800 bg-rose-50 px-3 py-1 rounded-md font-bold transition-all"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục @item.Name không?');">
+                                        Xóa
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

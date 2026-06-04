@@ -1,0 +1,43 @@
+﻿@model CMS.Data.Entities.Order
+
+<div class="px-6 py-6 max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-zinc-900">Chi tiết đơn hàng #@Model.Id</h2>
+        <a asp-action="Index" class="text-indigo-600 hover:text-indigo-800 font-bold">← Quay lại</a>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6 mb-8">
+        <div class="bg-white p-4 rounded-xl border border-zinc-200">
+            <h4 class="font-bold text-zinc-500 uppercase text-xs mb-2">Thông tin khách hàng</h4>
+            <p class="text-zinc-900 font-semibold">@Model.Customer?.FullName</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-zinc-200">
+            <h4 class="font-bold text-zinc-500 uppercase text-xs mb-2">Trạng thái</h4>
+            <span class="px-3 py-1 rounded-full text-sm font-bold bg-zinc-100">
+                @(Model.Status == 0 ? "Chờ duyệt" : Model.Status == 1 ? "Đang giao" : "Đã xong")
+            </span>
+        </div>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white">
+        <table class="min-w-full divide-y divide-zinc-200">
+            <thead class="bg-zinc-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-zinc-500 uppercase">Sản phẩm</th>
+                    <th class="px-6 py-3 text-center text-xs font-bold text-zinc-500 uppercase">Số lượng</th>
+                    <th class="px-6 py-3 text-right text-xs font-bold text-zinc-500 uppercase">Đơn giá</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-200">
+                @foreach (var item in Model.OrderDetails)
+                {
+                    <tr>
+                        <td class="px-6 py-4 text-sm font-medium text-zinc-900">@item.Product?.Name</td>
+                        <td class="px-6 py-4 text-sm text-center">@item.Quantity</td>
+                        <td class="px-6 py-4 text-sm text-right font-bold text-rose-600">@item.UnitPrice.ToString("N0") đ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

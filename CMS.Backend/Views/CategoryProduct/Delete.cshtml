@@ -1,0 +1,28 @@
+﻿@model CMS.Data.Entities.CategoryProduct
+
+@{
+    ViewData["Title"] = "Xác nhận xóa danh mục";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6 mx-auto">
+            <div class="bg-light rounded p-4 text-center">
+                <h6 class="mb-4 text-danger"><i class="fa fa-exclamation-triangle me-2"></i>CẢNH BÁO HỆ THỐNG</h6>
+                <p>Bạn có chắc chắn muốn xóa danh mục này? Hành động này có thể ảnh hưởng đến các sản phẩm thuộc danh mục.</p>
+
+                <div class="border rounded p-3 my-3 bg-white text-start">
+                    <p class="mb-1"><strong>Mã danh mục:</strong> @Model.Id</p>
+                    <p class="mb-1"><strong>Tên danh mục:</strong> <span class="text-dark fw-bold">@Model.Name</span></p>
+                    <p class="mb-0"><strong>Mô tả:</strong> @(string.IsNullOrEmpty(Model.Description) ? "Không có mô tả" : Model.Description)</p>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger px-4"><i class="fa fa-trash me-2"></i>Xác Nhận Xóa</button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2 px-4">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

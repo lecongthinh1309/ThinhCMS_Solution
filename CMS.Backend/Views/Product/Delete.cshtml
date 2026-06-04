@@ -1,0 +1,31 @@
+﻿@model CMS.Data.Entities.Product
+
+@{
+    ViewData["Title"] = "Xác nhận xóa sản phẩm";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6 mx-auto">
+            <div class="bg-light rounded p-4 text-center">
+                <h6 class="mb-4 text-danger"><i class="fa fa-exclamation-triangle me-2"></i>CẢNH BÁO XÓA DỮ LIỆU</h6>
+                <p>Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm dưới đây khỏi hệ thống không?</p>
+
+                <div class="border rounded p-3 my-3 bg-white">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="@Model.Name" style="max-width: 150px; max-height: 150px; object-fit: cover;" class="rounded mb-3" />
+                    }
+                    <h5>@Model.Name</h5>
+                    <p class="text-danger fw-bold">Giá: @Model.Price.ToString("N0") đ</p>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger px-4"><i class="fa fa-trash me-2"></i>Xác Nhận Xóa</button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2 px-4">Hủy Bỏ</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

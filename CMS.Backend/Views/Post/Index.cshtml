@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_LayoutAdmin";
+    Layout = "_Layout";
 }
 @model IEnumerable<CMS.Data.Entities.Post>
 
@@ -7,48 +7,42 @@
     ViewData["Title"] = "Danh sách bài viết";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <h1 class="text-danger fw-bold m-0" style="text-transform: uppercase; font-size: 1.75rem;">
-            @ViewBag.CurrentCategoryName
-        </h1>
-        <a href="/Post/Create" class="btn btn-success d-flex align-items-center gap-2 shadow-sm px-3 py-2 rounded-3 fw-bold">
-            <i class="bi bi-plus-circle"></i> Thêm bài viết mới
-        </a>
+<div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center justify-between mb-8">
+        <div>
+            <h2 class="text-2xl font-bold text-zinc-900 uppercase">@ViewBag.CurrentCategoryName</h2>
+            <p class="mt-2 text-sm text-zinc-600">Quản lý nội dung bài viết trên hệ thống.</p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <a asp-controller="Post" asp-action="Create" class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 transition-all">
+                <i class="bi bi-plus-lg mr-2"></i> Thêm bài viết mới
+            </a>
+        </div>
     </div>
 
-    <div class="row g-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach (var item in Model)
         {
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden post-card d-flex flex-column">
-                    <img src="@item.ImageUrl" class="card-img-top" alt="Thumbnail" style="height: 190px; object-fit: cover;">
+            <div class="group flex flex-col rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="@item.ImageUrl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="@item.Title">
+                    <div class="absolute top-3 left-3">
+                        <span class="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-indigo-700 backdrop-blur-sm">
+                            @item.Category?.Name
+                        </span>
+                    </div>
+                </div>
 
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <div>
-                            <span class="badge bg-info text-dark mb-2">
-                                @item.Category?.Name
-                            </span>
+                <div class="flex flex-1 flex-col p-5">
+                    <h5 class="mb-2 text-base font-bold text-zinc-900 line-clamp-2 h-12">@item.Title</h5>
+                    <p class="mb-4 text-sm text-zinc-500 line-clamp-3 flex-1">@item.Content</p>
 
-                            <h5 class="card-title text-primary fw-bold mb-3">
-                                @item.Title
-                            </h5>
-
-                            <p class="card-text text-muted small mb-2">
-                                @item.Content
-                            </p>
-                        </div>
-
-                        <div>
-                            <p class="text-muted mb-3" style="font-size: 0.85rem;">
-                                Ngày đăng: @item.CreatedDate.ToString("dd/MM/yyyy")
-                            </p>
-
-                            <div class="d-flex gap-1 justify-content-start">
-                                <a href="/Post/Details/@item.Id" class="btn btn-outline-primary btn-sm px-2">Xem chi tiết</a>
-                                <a href="/Post/Edit/@item.Id" class="btn btn-warning btn-sm px-2 text-dark">Sửa</a>
-                                <a href="/Post/Delete/@item.Id" class="btn btn-danger btn-sm px-2"
-                                   onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?');">Xóa</a>
+                    <div class="mt-auto pt-4 border-t border-zinc-100">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-zinc-400 font-medium">@item.CreatedDate.ToString("dd/MM/yyyy")</span>
+                            <div class="flex gap-2">
+                                <a asp-controller="Post" asp-action="Edit" asp-route-id="@item.Id" class="text-amber-600 hover:text-amber-700 font-bold text-xs">Sửa</a>
+                                <a asp-controller="Post" asp-action="Delete" asp-route-id="@item.Id" class="text-rose-600 hover:text-rose-700 font-bold text-xs" onclick="return confirm('Xác nhận xóa?');">Xóa</a>
                             </div>
                         </div>
                     </div>
@@ -57,33 +51,3 @@
         }
     </div>
 </div>
-
-@section Styles {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        .post-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-            .post-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0.5rem 1rem 1rem rgba(0, 0, 0, 0.1) !important;
-            }
-
-        .card-title {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            height: 3rem;
-        }
-
-        .card-text {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            height: 4.5rem;
-        }
-    </style>
-}

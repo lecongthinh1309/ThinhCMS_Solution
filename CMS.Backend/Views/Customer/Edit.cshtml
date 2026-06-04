@@ -1,0 +1,32 @@
+﻿@model CMS.Data.Entities.Customer
+<div class="max-w-lg mx-auto p-6 bg-white border border-zinc-200 rounded-xl shadow-sm">
+    <h2 class="text-xl font-bold mb-6">Chỉnh sửa thông tin khách hàng</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-4">
+            <label class="block font-bold text-sm mb-1">Họ tên</label>
+            <input asp-for="FullName" class="w-full border p-2 rounded-lg" required />
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-bold text-sm mb-1">Email</label>
+            <input asp-for="Email" type="email" class="w-full border p-2 rounded-lg" required />
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-bold text-sm mb-1">Điện thoại</label>
+            <input asp-for="Phone" class="w-full border p-2 rounded-lg" />
+        </div>
+
+        <div class="mb-6">
+            <label class="block font-bold text-sm mb-1 text-indigo-600">Mật khẩu mới (để trống nếu không đổi)</label>
+            <input asp-for="Password" type="password" class="w-full border p-2 rounded-lg" />
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2 rounded-lg hover:bg-indigo-700 transition">
+            Lưu thay đổi
+        </button>
+    </form>
+</div>

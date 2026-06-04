@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CMS.Data.Entities.Order>
+
+<div class="px-6 py-4">
+    <h2 class="text-xl font-bold mb-4">Danh sách đơn hàng</h2>
+    <table class="w-full border-collapse border border-zinc-200">
+        <thead class="bg-zinc-50">
+            <tr>
+                <th class="border p-2">Mã ĐH</th>
+                <th class="border p-2">Khách hàng</th>
+                <th class="border p-2">Ngày đặt</th>
+                <th class="border p-2">Trạng thái</th>
+                <th class="border p-2">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="border p-2">#@item.Id</td>
+                    <td class="border p-2">@item.Customer?.FullName</td>
+                    <td class="border p-2">@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="border p-2 text-center">
+                        @switch (item.Status)
+                        {
+                            case 0:
+                                <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                break;
+                            case 1:
+
+                                <span class="badge bg-info">Đang giao</span>
+                                break;
+                            case 2:
+
+                                <span class="badge bg-success">Đã xong</span>
+                                break;
+                        }
+                    </td>
+                    <td class="border p-2 text-center">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="text-indigo-600">Chi tiết</a> |
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="text-amber-600">Sửa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

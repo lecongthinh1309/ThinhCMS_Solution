@@ -1,0 +1,31 @@
+﻿@model IEnumerable<CMS.Data.Entities.Customer>
+<div class="px-6 py-4">
+    <h2 class="text-2xl font-bold mb-6">Quản lý khách hàng</h2>
+
+    <div class="overflow-hidden border border-zinc-200 rounded-xl bg-white shadow-sm">
+        <table class="min-w-full divide-y divide-zinc-200">
+            <thead class="bg-zinc-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-zinc-500 uppercase">Họ tên</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-zinc-500 uppercase">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-zinc-500 uppercase">Điện thoại</th>
+                    <th class="px-6 py-3 text-center text-xs font-bold text-zinc-500 uppercase">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-200">
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-zinc-50">
+                        <td class="px-6 py-4 font-bold text-zinc-900">@item.FullName</td>
+                        <td class="px-6 py-4 text-zinc-600">@item.Email</td>
+                        <td class="px-6 py-4 text-zinc-600">@item.Phone</td>
+                        <td class="px-6 py-4 text-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-indigo-600 font-bold px-3 hover:text-indigo-800">Sửa</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="text-rose-600 font-bold px-3 hover:text-rose-800" onclick="return confirm('Xác nhận xóa khách hàng này?')">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

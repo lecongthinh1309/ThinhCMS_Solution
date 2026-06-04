@@ -1,66 +1,61 @@
 ﻿@{
-    Layout = "_LayoutAdmin";
+    Layout = "_Layout";
 }
 @model IEnumerable<CMS.Data.Entities.User>
-
 @{
     ViewData["Title"] = "Quản lý người dùng";
 }
 
-<div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark text-uppercase">Quản lý thành viên</h2>
-        <a href="/User/Create" class="btn btn-success shadow-sm">
-            <i class="bi bi-person-plus-fill"></i> + Thêm thành viên mới
+<div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center justify-between mb-8">
+        <div>
+            <h2 class="text-2xl font-bold text-zinc-900">Quản lý thành viên</h2>
+            <p class="mt-2 text-sm text-zinc-600">Phân quyền và quản lý tài khoản quản trị viên.</p>
+        </div>
+        <a href="/User/Create" class="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition-all">
+            <i class="bi bi-person-plus mr-2"></i> Thêm thành viên
         </a>
     </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4" style="width: 80px;">ID</th>
-                            <th>Tên Đăng Nhập</th>
-                            <th>Họ Và Tên</th>
-                            <th>Quyền Hạn</th>
-                            <th class="text-center">Thao Tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model)
-                        {
-                            <tr>
-                                <td class="ps-4">@user.Id</td>
-                                <td class="fw-bold">@user.Username</td>
-                                <td>@user.FullName</td>
-                                <td>
-                                    @if (user.Role == "Administrator")
-                                    {
-                                        <span class="badge bg-danger px-3 py-2">Administrator</span>
-                                    }
-                                    else if (user.Role == "Editor")
-                                    {
-                                        <span class="badge bg-info text-white px-3 py-2">Editor</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-primary px-3 py-2">@user.Role</span>
-                                    }
-                                </td>
-                                <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <a href="/User/Edit/@user.Id" class="btn btn-outline-warning btn-sm mx-1 rounded">Sửa</a>
-                                        <a href="/User/Delete/@user.Id" class="btn btn-outline-danger btn-sm mx-1 rounded"
-                                           onclick="return confirm('Bạn có chắc chắn muốn xóa thành viên [@user.Username] này không?');">Xóa</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+        <table class="min-w-full divide-y divide-zinc-200">
+            <thead class="bg-zinc-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase">Username</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase">Họ và Tên</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase">Quyền hạn</th>
+                    <th class="px-6 py-4 text-center text-xs font-bold text-zinc-500 uppercase">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-200">
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td class="px-6 py-4 font-bold text-zinc-900">@user.Username</td>
+                        <td class="px-6 py-4 text-zinc-600">@user.FullName</td>
+                        <td class="px-6 py-4">
+                            @if (user.Role == "Administrator")
+                            {
+                                <span class="px-2 py-1 rounded bg-rose-100 text-rose-700 text-xs font-bold">ADMIN</span>
+                            }
+                            else if (user.Role == "Editor")
+                            {
+
+                                <span class="px-2 py-1 rounded bg-sky-100 text-sky-700 text-xs font-bold">EDITOR</span>
+                            }
+                            else
+                            {
+
+                                <span class="px-2 py-1 rounded bg-zinc-100 text-zinc-700 text-xs font-bold">@user.Role</span>
+                            }
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <a href="/User/Edit/@user.Id" class="text-indigo-600 font-bold px-3">Sửa</a>
+                            <a href="/User/Delete/@user.Id" class="text-rose-600 font-bold px-3" onclick="return confirm('Xóa người dùng này?');">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
