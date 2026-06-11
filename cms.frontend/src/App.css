@@ -1,38 +1,167 @@
-.App {
-  text-align: center;
+﻿/* Hệ màu sắc & Font chữ Premium */
+:root {
+    --primary-color: #0f172a; /* Midnight Navy */
+    --accent-color: #b45309; /* Champagne Gold */
+    --accent-hover: #d97706;
+    --bg-light: #f8fafc; /* Slate Light BG */
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+    --card-shadow: 0 12px 40px rgba(15, 23, 42, 0.04);
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Header Cao cấp */
+.premium-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Thanh Tab Danh mục sản phẩm ngang */
+.category-tabs-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
 }
 
-.App-link {
-  color: #61dafb;
+.tab-item-btn {
+    background: #ffffff;
+    color: var(--text-dark);
+    border: 1px solid #e2e8f0;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-smooth);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    .tab-item-btn.active, .tab-item-btn:hover {
+        background: var(--primary-color);
+        color: #ffffff;
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+    }
+
+/* Thẻ Sản phẩm (Product Card) */
+.product-premium-card {
+    background: #ffffff;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-smooth);
 }
+
+    .product-premium-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
+    }
+
+.product-image-wrapper {
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 3/4;
+}
+
+    .product-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition-smooth);
+    }
+
+.product-premium-card:hover .product-image-wrapper img {
+    transform: scale(1.06);
+}
+
+/* Hệ thống các Nút chức năng mới */
+.btn-action-view {
+    background: transparent;
+    color: var(--text-dark);
+    border: 1px solid #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+    .btn-action-view:hover {
+        background: #f1f5f9;
+        color: var(--primary-color);
+    }
+
+.btn-action-buy {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #ffffff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+    .btn-action-buy:hover {
+        background: var(--accent-color);
+        transform: scale(1.03);
+        box-shadow: 0 8px 20px rgba(180, 83, 9, 0.2);
+    }
+
+/* Khu vực phân hệ Tin tức (Blog Section) */
+.blog-section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+    .blog-section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background-color: var(--accent-color);
+        border-radius: 2px;
+    }
+
+.blog-premium-card {
+    background: #ffffff;
+    border: none;
+    border-radius: 14px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-smooth);
+}
+
+    .blog-premium-card:hover {
+        transform: translateY(-4px);
+    }
+
+.blog-link {
+    color: var(--accent-color);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
+}
+
+    .blog-link:hover {
+        color: var(--accent-hover);
+        padding-left: 4px;
+    }

@@ -1,9 +1,9 @@
-import axiosClient from '../api/axiosClient';
+﻿import axiosClient from '../api/axiosClient';
 
 const categoryProductService = {
-    getAllCategoryProducts: () => {
-        
-        const url = '/categoriesproducts';
+    // Gọi tới Endpoint: https://localhost:7208/api/CategoryProducts
+    getAll: () => {
+        const url = '/CategoryProducts';
         return axiosClient.get(url);
     }
 };
