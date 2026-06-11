@@ -1,61 +1,56 @@
 ﻿@model CMS.Data.Entities.Product
 
 @{
-    ViewData["Title"] = "Thêm mới Sản phẩm";
+    ViewData["Title"] = "Thêm sản phẩm mới";
 }
 
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-sm-12 col-xl-8 mx-auto">
-            <div class="bg-light rounded h-100 p-4">
-                <h6 class="mb-4">Thêm Sản Phẩm Mới</h6>
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="max-w-2xl mx-auto mt-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-3 uppercase tracking-wide">Thêm sản phẩm mới</h2>
 
-                    <div class="mb-3">
-                        <label asp-for="Name" class="form-label">Tên sản phẩm (*)</label>
-                        <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm..." />
-                        <span asp-validation-for="Name" class="text-danger small"></span>
-                    </div>
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="space-y-5">
+        <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm"></div>
 
-                    <div class="mb-3">
-                        <label asp-for="CategoryProductId" class="form-label">Danh mục sản phẩm</label>
-                        <select asp-for="CategoryProductId" class="form-select" asp-items="ViewBag.CategoryProducts">
-                            <option value="">-- Chọn danh mục phân loại --</option>
-                        </select>
-                        <span asp-validation-for="CategoryProductId" class="text-danger small"></span>
-                    </div>
+        <div>
+            <label asp-for="CategoryProductId" class="block text-sm font-semibold text-gray-700 mb-1">Danh mục sản phẩm</label>
+            <select asp-for="CategoryProductId" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" asp-items="ViewBag.CategoryProducts">
+                <option value="">-- Chọn danh mục --</option>
+            </select>
+            <span asp-validation-for="CategoryProductId" class="text-red-500 text-xs mt-1 block"></span>
+        </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label asp-for="Price" class="form-label">Giá bán (VNĐ)</label>
-                            <input asp-for="Price" type="number" step="0.01" class="form-control" />
-                            <span asp-validation-for="Price" class="text-danger small"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="StockQuantity" class="form-label">Số lượng nhập kho</label>
-                            <input asp-for="StockQuantity" type="number" class="form-control" />
-                            <span asp-validation-for="StockQuantity" class="text-danger small"></span>
-                        </div>
-                    </div>
+        <div>
+            <label asp-for="Name" class="block text-sm font-semibold text-gray-700 mb-1">Tên sản phẩm</label>
+            <input asp-for="Name" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Nhập tên sản phẩm..." />
+            <span asp-validation-for="Name" class="text-red-500 text-xs mt-1 block"></span>
+        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Hình ảnh sản phẩm</label>
-                        <input type="file" name="imageFile" class="form-control" accept="image/*" />
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Description" class="form-label">Mô tả sản phẩm</label>
-                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập chất liệu, kích thước..."></textarea>
-                        <span asp-validation-for="Description" class="text-danger small"></span>
-                    </div>
-
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-save me-2"></i>Lưu lại</button>
-                        <a class="btn btn-secondary ms-2" asp-action="Index">Quay lại</a>
-                    </div>
-                </form>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label asp-for="Price" class="block text-sm font-semibold text-gray-700 mb-1">Giá bán (VNĐ)</label>
+                <input asp-for="Price" type="number" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                <span asp-validation-for="Price" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+            <div>
+                <label asp-for="StockQuantity" class="block text-sm font-semibold text-gray-700 mb-1">Số lượng kho</label>
+                <input asp-for="StockQuantity" type="number" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                <span asp-validation-for="StockQuantity" class="text-red-500 text-xs mt-1 block"></span>
             </div>
         </div>
-    </div>
+
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Hình ảnh sản phẩm</label>
+            <input type="file" name="imageFile" accept="image/*" class="w-full border border-gray-300 px-3 py-2 rounded-lg text-sm text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+        </div>
+
+        <div>
+            <label asp-for="Description" class="block text-sm font-semibold text-gray-700 mb-1">Mô tả sản phẩm</label>
+            <textarea asp-for="Description" rows="4" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Nhập mô tả chi tiết..."></textarea>
+            <span asp-validation-for="Description" class="text-red-500 text-xs mt-1 block"></span>
+        </div>
+
+        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+            <a asp-action="Index" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm transition">Quay lại</a>
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg text-sm shadow transition">Lưu sản phẩm</button>
+        </div>
+    </form>
 </div>

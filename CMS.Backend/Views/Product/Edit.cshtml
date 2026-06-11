@@ -1,69 +1,60 @@
 ﻿@model CMS.Data.Entities.Product
 
 @{
-    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+    ViewData["Title"] = "Cập nhật sản phẩm";
 }
 
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-sm-12 col-xl-8 mx-auto">
-            <div class="bg-light rounded h-100 p-4">
-                <h6 class="mb-4">Chỉnh sửa thông tin Sản phẩm</h6>
+<div class="max-w-2xl mx-auto mt-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-3 uppercase tracking-wide">Cập nhật sản phẩm</h2>
 
-                <form asp-action="Edit" method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="Id" />
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" class="space-y-5">
+        <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm"></div>
+        <input type="hidden" asp-for="Id" />
 
-                    <div class="mb-3">
-                        <label asp-for="Name" class="form-label">Tên sản phẩm</label>
-                        <input asp-for="Name" class="form-control" required>
-                    </div>
+        <div>
+            <label asp-for="CategoryProductId" class="block text-sm font-semibold text-gray-700 mb-1">Danh mục sản phẩm</label>
+            <select asp-for="CategoryProductId" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" asp-items="ViewBag.CategoryProducts"></select>
+            <span asp-validation-for="CategoryProductId" class="text-red-500 text-xs mt-1 block"></span>
+        </div>
 
-                    <div class="mb-3">
-                        <label asp-for="CategoryProductId" class="form-label">Danh mục sản phẩm</label>
-                        <select asp-for="CategoryProductId" class="form-select" asp-items="ViewBag.CategoryProducts" required></select>
-                    </div>
+        <div>
+            <label asp-for="Name" class="block text-sm font-semibold text-gray-700 mb-1">Tên sản phẩm</label>
+            <input asp-for="Name" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" />
+            <span asp-validation-for="Name" class="text-red-500 text-xs mt-1 block"></span>
+        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Hình ảnh hiện tại</label>
-                        <div>
-                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                            {
-                                <img src="@Model.ImageUrl" alt="Product Image" style="width: 150px; height: 150px; object-fit: cover; border-radius: 5px;" class="mb-2">
-                            }
-                            else
-                            {
-                                <p class="text-muted">Chưa có ảnh</p>
-                            }
-                        </div>
-                        <label class="form-label mt-2">Chọn ảnh mới (nếu muốn thay đổi)</label>
-                        <input type="file" name="imageFile" class="form-control" accept="image/*">
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="Price" class="form-label">Giá bán</label>
-                        <input asp-for="Price" type="number" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="StockQuantity" class="form-label">Số lượng kho</label>
-                        <input asp-for="StockQuantity" type="number" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="Description" class="form-label">Mô tả chi tiết</label>
-                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                    </div>
-
-                    <div class="d-flex justify-content-end">
-                        <a asp-action="Index" class="btn btn-secondary me-2">Quay lại</a>
-                        <button type="submit" class="btn btn-warning">Lưu thay đổi</button>
-                    </div>
-                </form>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label asp-for="Price" class="block text-sm font-semibold text-gray-700 mb-1">Giá bán (VNĐ)</label>
+                <input asp-for="Price" type="number" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                <span asp-validation-for="Price" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+            <div>
+                <label asp-for="StockQuantity" class="block text-sm font-semibold text-gray-700 mb-1">Số lượng kho</label>
+                <input asp-for="StockQuantity" type="number" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" />
+                <span asp-validation-for="StockQuantity" class="text-red-500 text-xs mt-1 block"></span>
             </div>
         </div>
-    </div>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Hình ảnh hiện tại</label>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="w-24 h-24 object-cover rounded-md mb-2 border shadow-sm" />
+            }
+            <input type="file" name="imageFile" accept="image/*" class="w-full border border-gray-300 px-3 py-2 rounded-lg text-sm text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+            <p class="text-xs text-gray-400 mt-1">Để trống nếu không muốn thay đổi ảnh.</p>
+        </div>
+
+        <div>
+            <label asp-for="Description" class="block text-sm font-semibold text-gray-700 mb-1">Mô tả sản phẩm</label>
+            <textarea asp-for="Description" rows="4" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"></textarea>
+            <span asp-validation-for="Description" class="text-red-500 text-xs mt-1 block"></span>
+        </div>
+
+        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+            <a asp-action="Index" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm transition">Hủy bỏ</a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg text-sm shadow transition">Cập nhật</button>
+        </div>
+    </form>
+</div>

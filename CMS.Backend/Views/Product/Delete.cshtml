@@ -4,28 +4,24 @@
     ViewData["Title"] = "Xác nhận xóa sản phẩm";
 }
 
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-sm-12 col-xl-6 mx-auto">
-            <div class="bg-light rounded p-4 text-center">
-                <h6 class="mb-4 text-danger"><i class="fa fa-exclamation-triangle me-2"></i>CẢNH BÁO XÓA DỮ LIỆU</h6>
-                <p>Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm dưới đây khỏi hệ thống không?</p>
+<div class="max-w-md mx-auto mt-16 bg-white border border-red-100 rounded-xl shadow-lg overflow-hidden">
+    <div class="bg-red-50 p-4 border-b border-red-100 text-center">
+        <h2 class="text-xl font-bold text-red-600 uppercase tracking-wide">Cảnh báo xóa dữ liệu</h2>
+    </div>
 
-                <div class="border rounded p-3 my-3 bg-white">
-                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                    {
-                        <img src="@Model.ImageUrl" alt="@Model.Name" style="max-width: 150px; max-height: 150px; object-fit: cover;" class="rounded mb-3" />
-                    }
-                    <h5>@Model.Name</h5>
-                    <p class="text-danger fw-bold">Giá: @Model.Price.ToString("N0") đ</p>
-                </div>
+    <div class="p-6 text-center space-y-4">
+        <p class="text-gray-600">Bạn có chắc chắn muốn xóa vĩnh viễn sản phẩm dưới đây không?</p>
 
-                <form asp-action="Delete" method="post">
-                    <input type="hidden" asp-for="Id" />
-                    <button type="submit" class="btn btn-danger px-4"><i class="fa fa-trash me-2"></i>Xác Nhận Xóa</button>
-                    <a asp-action="Index" class="btn btn-secondary ms-2 px-4">Hủy Bỏ</a>
-                </form>
-            </div>
+        <div class="bg-gray-50 p-4 rounded-lg border text-left space-y-2">
+            <div><span class="text-xs font-bold uppercase text-gray-400">Tên sản phẩm:</span> <strong class="text-gray-800 block">@Model.Name</strong></div>
+            <div><span class="text-xs font-bold uppercase text-gray-400">Danh mục:</span> <span class="text-gray-700 block">@Model.CategoryProduct?.Name</span></div>
+            <div><span class="text-xs font-bold uppercase text-gray-400">Giá bán:</span> <span class="text-red-600 font-bold block">@Model.Price.ToString("N0") đ</span></div>
         </div>
+
+        <form asp-action="Delete" method="post" class="flex justify-center space-x-3 pt-4">
+            <input type="hidden" asp-for="Id" />
+            <a asp-action="Index" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-5 py-2 rounded-lg text-sm transition">Hủy</a>
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-lg text-sm shadow transition">Xác nhận xóa</button>
+        </form>
     </div>
 </div>

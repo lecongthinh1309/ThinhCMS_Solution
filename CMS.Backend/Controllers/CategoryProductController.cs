@@ -1,8 +1,8 @@
 ﻿/*
- * Sinh viên: Phạm Đăng Khoa
- * Mã Sinh Viên : 2123110058
+ * Sinh viên: Le Cong Thinh
+ * Mã Sinh Viên : 2123110063
  * Lớp: CCQ2311B - Trường Cao Đẳng Công Thương TP.HCM
- * Version 8.3 - Bản sửa lỗi triệt để: Kiểm tra sản phẩm tồn tại trước khi xóa danh mục
+
  */
 
 using Microsoft.AspNetCore.Mvc;

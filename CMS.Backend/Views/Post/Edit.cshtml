@@ -4,46 +4,65 @@
     ViewData["Title"] = "Chỉnh sửa bài viết";
 }
 
-<div class="container mt-4">
-    <div class="card shadow mx-auto" style="max-width: 650px;">
-        <div class="card-header bg-warning text-dark">
-            <h4 class="mb-0 fw-bold">CHỈNH SỬA BÀI VIẾT</h4>
+<div class="px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-zinc-900">Chỉnh sửa bài viết</h2>
+            <p class="mt-2 text-sm text-zinc-600">Cập nhật nội dung và hình ảnh minh họa cho bài viết của bạn.</p>
         </div>
-        <div class="card-body">
-            <form asp-action="Edit" method="post" enctype="multipart/form-data">
-                @Html.AntiForgeryToken()
 
-                <input type="hidden" asp-for="Id" />
+        <!-- Form -->
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="bg-white border border-zinc-200 rounded-xl shadow-sm p-6 sm:p-8">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Danh mục bài viết</label>
-                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories" required></select>
+            <div class="grid grid-cols-1 gap-6">
+                <!-- Category -->
+                <div>
+                    <label asp-for="CategoryId" class="block text-sm font-bold text-zinc-700 mb-2">Danh mục bài viết</label>
+                    <select asp-for="CategoryId" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" asp-items="ViewBag.Categories" required></select>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Title" class="form-label fw-bold">Tiêu đề bài viết</label>
-                    <input asp-for="Title" class="form-control" required />
+                <!-- Title -->
+                <div>
+                    <label asp-for="Title" class="block text-sm font-bold text-zinc-700 mb-2">Tiêu đề bài viết</label>
+                    <input asp-for="Title" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" required />
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Hình ảnh hiện tại</label>
-                    <div class="mb-2">
-                        <img src="@Model.ImageUrl" class="img-thumbnail rounded shadow-sm" style="max-height: 120px;" alt="Current Image" />
+                <!-- Image Upload -->
+                <div>
+                    <label class="block text-sm font-bold text-zinc-700 mb-3">Hình ảnh bài viết</label>
+                    <div class="flex items-center gap-6">
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <img src="@Model.ImageUrl" alt="Post Image" class="w-24 h-24 object-cover rounded-lg border border-zinc-200 shadow-sm">
+                        }
+                        else
+                        {
+                            <div class="w-24 h-24 bg-zinc-100 rounded-lg flex items-center justify-center text-zinc-400 text-xs">No image</div>
+                        }
+                        <div class="flex-1">
+                            <label class="block text-xs font-bold text-zinc-500 mb-1">Thay đổi ảnh mới:</label>
+                            <input type="file" name="imageFile" class="w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer" accept="image/*" />
+                        </div>
                     </div>
-                    <label class="form-label fw-bold text-primary">Thay đổi hình ảnh mới (Để trống nếu giữ nguyên)</label>
-                    <input type="file" name="imageFile" class="form-control" accept="image/*" />
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Content" class="form-label fw-bold">Nội dung bài viết</label>
-                    <textarea asp-for="Content" class="form-control" rows="6" required></textarea>
+                <!-- Content -->
+                <div>
+                    <label asp-for="Content" class="block text-sm font-bold text-zinc-700 mb-2">Nội dung bài viết</label>
+                    <textarea asp-for="Content" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" rows="8" required></textarea>
                 </div>
+            </div>
 
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="/Post" class="btn btn-secondary px-4">Quay lại</a>
-                    <button type="submit" class="btn btn-warning px-4 fw-bold text-dark">Cập nhật</button>
-                </div>
-            </form>
-        </div>
+            <!-- Footer Actions -->
+            <div class="mt-8 flex items-center justify-end gap-3 border-t border-zinc-100 pt-6">
+                <a asp-action="Index" class="text-sm font-semibold text-zinc-600 hover:text-zinc-900">Quay lại</a>
+                <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 transition-all">
+                    Cập nhật bài viết
+                </button>
+            </div>
+        </form>
     </div>
 </div>

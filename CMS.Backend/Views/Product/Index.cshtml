@@ -1,51 +1,50 @@
-﻿@{
-    Layout = "_Layout";
-}
-@model IEnumerable<CMS.Data.Entities.Product>
+﻿@model IEnumerable<CMS.Data.Entities.Product>
+
 @{
-    ViewData["Title"] = "Quản lý Sản phẩm";
+    ViewData["Title"] = "Quản lý sản phẩm";
 }
 
-<div class="px-4 sm:px-6 lg:px-8">
-    <div class="sm:flex sm:items-center justify-between mb-8">
-        <div>
-            <h2 class="text-2xl font-bold text-zinc-900">Danh sách sản phẩm</h2>
-            <p class="mt-2 text-sm text-zinc-600">Quản lý kho hàng và thông tin sản phẩm.</p>
-        </div>
-        <a asp-action="Create" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 transition-all">
-            <i class="bi bi-plus-lg mr-2"></i> Thêm sản phẩm
+<div class="container mx-auto px-4 mt-6 max-w-6xl">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 tracking-wide uppercase">Danh sách sản phẩm</h2>
+        <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow transition duration-200 text-sm">
+            + THÊM SẢN PHẨM MỚI
         </a>
     </div>
 
-    <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
-        <table class="min-w-full divide-y divide-zinc-200">
-            <thead class="bg-zinc-50">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase">Hình ảnh</th>
-                    <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase text-left">Tên sản phẩm</th>
-                    <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase text-left">Danh mục</th>
-                    <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase">Giá bán</th>
-                    <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase">Kho</th>
-                    <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase text-center">Thao tác</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Hình ảnh</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Tên sản phẩm</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Danh mục</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Giá bán</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Số lượng kho</th>
+                    <th class="px-6 py-3.5 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Thao tác</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-zinc-200">
+            <tbody class="bg-white divide-y divide-gray-200 text-sm">
                 @foreach (var item in Model)
                 {
-                    <tr class="hover:bg-zinc-50">
-                        <td class="px-6 py-4">
-                            <img src="@item.ImageUrl" class="w-12 h-12 rounded-lg object-cover border border-zinc-200" />
-                        </td>
-                        <td class="px-6 py-4 font-semibold text-zinc-900">@item.Name</td>
-                        <td class="px-6 py-4 text-sm text-zinc-600">@(item.CategoryProduct?.Name ?? "N/A")</td>
-                        <td class="px-6 py-4 text-sm font-bold text-rose-600">@item.Price.ToString("N0") đ</td>
-                        <td class="px-6 py-4 text-sm text-center">@item.StockQuantity</td>
-                        <td class="px-6 py-4 text-center">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-indigo-600 hover:text-indigo-900 font-bold px-3">Sửa</a>
-                            @if (User.IsInRole("Administrator"))
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
                             {
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-rose-600 hover:text-rose-900 font-bold px-3" onclick="return confirm('Xóa sản phẩm này?');">Xóa</a>
+                                <img src="@item.ImageUrl" class="w-16 h-16 object-cover rounded-md border shadow-sm" alt="@item.Name" />
                             }
+                            else
+                            {
+                                <div class="w-16 h-16 bg-gray-100 flex items-center justify-center text-gray-400 rounded-md border text-xs">No Image</div>
+                            }
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-900">@item.Name</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600">@item.CategoryProduct?.Name</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-red-600">@item.Price.ToString("N0") đ</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-700 font-medium">@item.StockQuantity</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="text-indigo-600 hover:text-indigo-900 mr-3 inline-block font-semibold">Sửa</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-600 hover:text-red-900 ml-3 inline-block font-semibold">Xóa</a>
                         </td>
                     </tr>
                 }
