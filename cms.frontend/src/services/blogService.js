@@ -1,16 +1,14 @@
 ﻿import axiosClient from '../api/axiosClient';
 
 const blogService = {
-    // 1. Hàm lấy danh sách toàn bộ bài viết (Phần bài chung em đã làm)
+    // Hàm lấy tất cả bài viết
     getAllPosts: () => {
-        const url = '/Posts';
-        return axiosClient.get(url);
+        return axiosClient.get('/Posts');
     },
 
-    // 2. THÊM MỚI BƯỚC NÀY: Hàm lấy danh sách Chuyên mục tin tức
-    getBlogCategories: () => {
-        const url = '/Categories'; // Endpoint này gọi sang CategoriesController của Backend
-        return axiosClient.get(url);
+    // Hàm lấy chi tiết một bài viết cụ thể
+    getPostDetail: (id) => {
+        return axiosClient.get(`/Posts/${id}`);
     }
 };
 

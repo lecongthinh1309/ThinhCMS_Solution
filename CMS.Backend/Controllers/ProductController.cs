@@ -36,7 +36,8 @@ namespace CMS.Backend.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.CategoriesProducts = new SelectList(_context.CategoriesProducts, "Id", "Name");
+            // Đã đồng bộ tên biến chuẩn thành ViewBag.CategoryProducts để đồng nhất với View
+            ViewBag.CategoryProducts = new SelectList(_context.CategoriesProducts, "Id", "Name");
             return View();
         }
 
@@ -63,7 +64,8 @@ namespace CMS.Backend.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.CategoriesProducts = new SelectList(_context.CategoriesProducts, "Id", "Name", product.CategoryProductId);
+            // Đồng bộ lại tên biến tại đây nếu xảy ra lỗi Validation để không bị mất dữ liệu ô chọn
+            ViewBag.CategoryProducts = new SelectList(_context.CategoriesProducts, "Id", "Name", product.CategoryProductId);
             return View(product);
         }
 
@@ -76,7 +78,7 @@ namespace CMS.Backend.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product == null) return NotFound();
 
-            ViewBag.CategoriesProducts = new SelectList(_context.CategoriesProducts, "Id", "Name", product.CategoryProductId);
+            ViewBag.CategoryProducts = new SelectList(_context.CategoriesProducts, "Id", "Name", product.CategoryProductId);
             return View(product);
         }
 
@@ -120,7 +122,7 @@ namespace CMS.Backend.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.CategoriesProducts = new SelectList(_context.CategoriesProducts, "Id", "Name", product.CategoryProductId);
+            ViewBag.CategoryProducts = new SelectList(_context.CategoriesProducts, "Id", "Name", product.CategoryProductId);
             return View(product);
         }
 
@@ -145,7 +147,6 @@ namespace CMS.Backend.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
-                // Nếu muốn xóa file vật lý trong thư mục wwwroot/uploads khi xóa sản phẩm, viết thêm ở đây.
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
             }

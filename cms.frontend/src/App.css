@@ -1,9 +1,8 @@
-﻿/* Hệ màu sắc & Font chữ Premium */
-:root {
-    --primary-color: #0f172a; /* Midnight Navy */
-    --accent-color: #b45309; /* Champagne Gold */
+﻿:root {
+    --primary-color: #0f172a;
+    --accent-color: #b45309;
     --accent-hover: #d97706;
-    --bg-light: #f8fafc; /* Slate Light BG */
+    --bg-light: #f8fafc;
     --text-dark: #1e293b;
     --text-muted: #64748b;
     --card-shadow: 0 12px 40px rgba(15, 23, 42, 0.04);
@@ -16,7 +15,6 @@ body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Header Cao cấp */
 .premium-header {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: #ffffff;
@@ -25,7 +23,6 @@ body {
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
 }
 
-/* Thanh Tab Danh mục sản phẩm ngang */
 .category-tabs-container {
     display: flex;
     justify-content: center;
@@ -54,7 +51,6 @@ body {
         box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
     }
 
-/* Thẻ Sản phẩm (Product Card) */
 .product-premium-card {
     background: #ffffff;
     border: none;
@@ -73,6 +69,7 @@ body {
     overflow: hidden;
     position: relative;
     aspect-ratio: 3/4;
+    background-color: #f1f5f9;
 }
 
     .product-image-wrapper img {
@@ -86,7 +83,6 @@ body {
     transform: scale(1.06);
 }
 
-/* Hệ thống các Nút chức năng mới */
 .btn-action-view {
     background: transparent;
     color: var(--text-dark);
@@ -120,7 +116,6 @@ body {
         box-shadow: 0 8px 20px rgba(180, 83, 9, 0.2);
     }
 
-/* Khu vực phân hệ Tin tức (Blog Section) */
 .blog-section-title {
     font-size: 1.75rem;
     font-weight: 700;

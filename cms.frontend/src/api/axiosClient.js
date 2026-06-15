@@ -1,13 +1,13 @@
 ﻿import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: 'https://localhost:7208/api', // 🌟 Đổi số port này khớp với Backend ASP.NET Core của em
+    // Thay đổi số port 7001 cho đúng với port IIS Express/Kestrel Backend của em
+    baseURL: 'https://localhost:7208/api',
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Bộ lọc trung gian để tự động bóc tách tầng dữ liệu khi phản hồi
 axiosClient.interceptors.response.use(
     (response) => {
         if (response && response.data) {
@@ -16,7 +16,7 @@ axiosClient.interceptors.response.use(
         return response;
     },
     (error) => {
-        console.error("Lỗi kết nối trục API:", error);
+        console.error("Lỗi trục kết nối API:", error);
         return Promise.reject(error);
     }
 );

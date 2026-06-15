@@ -1,48 +1,45 @@
 ﻿import React, { useState, useEffect } from 'react';
-import categoryProductService from '../services/categoryProductService';
+import axiosClient from '../api/axiosClient';
 
 const CategoryProductList = ({ onSelectCategory }) => {
     const [categories, setCategories] = useState([]);
-    const [activeId, setActiveId] = useState(null);
+    const [activeId, setActiveId] = useState(null); // null nghĩa là đang chọn "TẤT CẢ SẢN PHẨM"
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                // Giả lập dữ liệu nếu API chưa bật, nếu có API sẽ tự động đè lên
-                const mockData = [
-                    { id: null, name: "TẤT CẢ SẢN PHẨM" },
-                    { id: 1, name: "TRANG PHỤC MẶC Ở NHÀ" },
-                    { id: 2, name: "VEST & ÂU PHỤC NAM" },
-                    { id: 3, name: "ĐẦM DẠ HỘI QUÝ PHÁI" },
-                    { id: 4, name: "THỜI TRANG CÔNG SỞ NỮ" }
-                ];
-                setCategories(mockData);
-
-                const data = await categoryProductService.getAll();
-                if (data && data.length > 0) {
-                    setCategories([{ id: null, name: "TẤT CẢ SẢN PHẨM" }, ...data]);
-                }
-            } catch (error) {
-                console.log("Sử dụng dữ liệu cấu trúc mẫu cho danh mục.");
-            }
+        const fetchCategories = () => {
+            // Gọi endpoint lấy danh mục từ SQL Server của em
+            axiosClient.get('/Categories')
+                .then(data => setCategories(data))
+                .catch(err => console.error("Lỗi lấy danh mục:", err));
         };
         fetchCategories();
     }, []);
 
-    const handleTabClick = (id) => {
+    const handleCategoryClick = (id) => {
         setActiveId(id);
-        if (onSelectCategory) onSelectCategory(id);
+        onSelectCategory(id); // Truyền ID danh mục ngược lên HomeView để lọc ProductList
     };
 
     return (
-        <div className="category-tabs-container">
-            {categories.map((item) => (
+        <div className="d-flex flex-wrap justify-content-center gap-2 mb-4">
+            {/* Nút mặc định để hiển thị toàn bộ sản phẩm */}
+            <button
+                className={`btn btn-sm text-uppercase px-3 font-weight-bold ${activeId === null ? 'btn-primary shadow' : 'btn-outline-secondary'}`}
+                onClick={() => handleCategoryClick(null)}
+                style={{ borderRadius: '6px', fontSize: '0.8rem', letterSpacing: '0.5px' }}
+            >
+                <i className="fa-solid fa-list mr-1"></i> Tất cả sản phẩm
+            </button>
+
+            {/* Vòng lặp danh mục lấy từ Database */}
+            {categories.map((cat) => (
                 <button
-                    key={item.id ?? 'all'}
-                    className={`tab-item-btn ${activeId === item.id ? 'active' : ''}`}
-                    onClick={() => handleTabClick(item.id)}
+                    key={cat.id}
+                    className={`btn btn-sm text-uppercase px-3 font-weight-bold ${activeId === cat.id ? 'btn-primary shadow' : 'btn-outline-secondary'}`}
+                    onClick={() => handleCategoryClick(cat.id)}
+                    style={{ borderRadius: '6px', fontSize: '0.8rem', letterSpacing: '0.5px' }}
                 >
-                    {item.name.toUpperCase()}
+                    {cat.name}
                 </button>
             ))}
         </div>
