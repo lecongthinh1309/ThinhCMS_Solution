@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="h-full bg-zinc-50">
 <head>
     <meta charset="utf-8" />
@@ -18,7 +18,6 @@
             background: #059669;
             color: white !important;
         }
-        /* Emerald-600 */
     </style>
 </head>
 <body class="h-full overflow-hidden text-zinc-900 antialiased">
@@ -30,52 +29,93 @@
                 <span class="text-lg font-bold text-zinc-900">Thinh<span class="text-emerald-600">.CMS</span></span>
             </div>
 
-            <nav class="flex-1 space-y-1 p-4">
+            <nav class="flex-1 space-y-1 p-4 overflow-y-auto">
                 @{
                     var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
-                    var menuItems = new[] {
-                                new { Icon = "speedometer2", Name = "Trang chủ", Controller = "Home" },
-                                new { Icon = "tags", Name = "Danh mục", Controller = "Category" },
-                                new { Icon = "newspaper", Name = "Bài viết", Controller = "Post" },
-                                new { Icon = "collection-fill", Name = "DM Sản phẩm", Controller = "CategoryProduct" },
-                                new { Icon = "box-seam", Name = "Sản phẩm", Controller = "Product" },
-                                new { Icon = "clipboard2-heart", Name = "Sổ đơn hàng", Controller = "Order" },
-                                new { Icon = "person-gear", Name = "Người dùng", Controller = "User" },
-                                new { Icon = "people", Name = "Khách hàng", Controller = "Customer" },
 
-                                };
+                    // Kiểm tra quyền hạn của người dùng đăng nhập để ẩn/hiện menu
+                    var isAuthorizedForProducts = User.Identity?.IsAuthenticated == true &&
+                    (User.IsInRole("Administrator") ||
+                    User.IsInRole("Editor") ||
+                    User.FindFirst("Role")?.Value == "Administrator" ||
+                    User.FindFirst("Role")?.Value == "Editor");
                 }
 
-                @foreach (var item in menuItems)
+                <a asp-controller="Home" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Home" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-speedometer2 text-lg mr-3"></i> Trang chủ
+                </a>
+                <a asp-controller="Category" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Category" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-tags text-lg mr-3"></i> Danh mục
+                </a>
+                <a asp-controller="Post" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Post" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-newspaper text-lg mr-3"></i> Bài viết
+                </a>
+                <a asp-controller="Banner" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Banner" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-images text-lg mr-3"></i> Banner
+                </a>
+
+                @if (isAuthorizedForProducts)
                 {
-                    <a asp-controller="@item.Controller" asp-action="Index"
-                       class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200
-                           @(currentController == item.Controller ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
-                        <i class="bi bi-@item.Icon text-lg mr-3"></i> @item.Name
+                    <a asp-controller="CategoryProduct" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "CategoryProduct" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-collection-fill text-lg mr-3"></i> DM Sản phẩm
+                    </a>
+                    <a asp-controller="Product" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Product" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-box-seam text-lg mr-3"></i> Sản phẩm
+                    </a>
+                    <a asp-controller="Order" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Order" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-clipboard2-heart text-lg mr-3"></i> Sổ đơn hàng
+                    </a>
+                    <a asp-controller="Customer" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Customer" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-people text-lg mr-3"></i> Khách hàng
                     </a>
                 }
+
+                <a asp-controller="User" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "User" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-person-gear text-lg mr-3"></i> Người dùng
+                </a>
             </nav>
 
             <div class="p-4 border-t border-zinc-100">
-                <div class="bg-zinc-900 rounded-xl p-4 text-white">
-                    <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold mb-1">Sinh viên</p>
-                    <p class="font-bold text-sm"></p>
-                    <p class="text-xs text-emerald-400">CCQ2311B</p>
+                <div class="bg-zinc-900 rounded-xl p-4 text-white shadow-inner">
+                    <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold mb-1">Sinh viên thực hiện</p>
+                    <p class="font-bold text-sm text-zinc-100">Lê Công Thịnh</p>
+                    <p class="text-xs text-zinc-400 mt-0.5">MSSV: 2123110063</p>
+                    <p class="text-[11px] text-emerald-400 font-medium mt-2 flex items-center gap-1">
+                        <i class="bi bi-gradient"></i> CCQ2311B
+                    </p>
                 </div>
             </div>
         </aside>
 
         <div class="flex flex-1 flex-col h-full overflow-hidden bg-zinc-50">
-            <header class="flex h-16 items-center justify-between bg-white border-b border-zinc-200 px-8">
+            <header class="flex h-16 items-center justify-between bg-white border-b border-zinc-200 px-8 flex-shrink-0">
                 <h1 class="text-lg font-semibold text-zinc-800">@ViewData["Title"]</h1>
 
                 <div class="flex items-center gap-3">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <div class="flex items-center text-sm text-zinc-600 font-medium">
-                            <span class="mr-3">@User.FindFirst("FullName")?.Value</span>
-                            <a asp-controller="Account" asp-action="Logout" class="text-red-500 hover:text-red-700 font-bold">
-                                <i class="bi bi-box-arrow-right">Đăng xuất</i>
+                        // Bộ lọc động quét dữ liệu từ Cookie Identity
+                        var fullName = User.FindFirst("FullName")?.Value ?? User.Identity.Name ?? "Thinh Le Cong";
+                        var roleName = User.FindFirst("Role")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "Administrator";
+
+                        <div class="flex items-center text-sm gap-4">
+                            <div class="flex items-center gap-3 bg-zinc-50 border border-zinc-200/80 px-4 py-1.5 rounded-full">
+                                <div class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                                    <i class="bi bi-person-fill text-sm"></i>
+                                </div>
+                                <div class="flex flex-col text-left">
+                                    <span class="text-xs font-bold text-zinc-800 leading-tight">@fullName</span>
+                                    <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded mt-0.5 w-max border border-emerald-200/50">
+                                        🔑 @roleName
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="h-6 w-px bg-zinc-200"></div>
+
+                            <a asp-controller="Account" asp-action="Logout" class="flex items-center gap-1.5 text-zinc-500 hover:text-red-600 font-medium transition-colors no-underline text-sm">
+                                <i class="bi bi-box-arrow-right text-base"></i>
+                                <span>Đăng xuất</span>
                             </a>
                         </div>
                     }

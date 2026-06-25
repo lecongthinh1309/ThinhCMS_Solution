@@ -1,35 +1,43 @@
-﻿@model CMS.Data.Entities.CategoryProduct
+@model CMS.Data.Entities.CategoryProduct
 
 @{
     ViewData["Title"] = "Thêm mới Danh mục";
 }
 
-<div class="container-fluid pt-4 px-4">
-    <div class="row g-4">
-        <div class="col-sm-12 col-xl-6 mx-auto">
-            <div class="bg-light rounded h-100 p-4">
-                <h6 class="mb-4">Tạo Danh Mục Sản Phẩm Mới</h6>
-                <form asp-action="Create" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="max-w-2xl mx-auto mt-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+    <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-3 uppercase tracking-wide">Tạo Danh Mục Sản Phẩm Mới</h2>
 
-                    <div class="mb-3">
-                        <label asp-for="Name" class="form-label">Tên danh mục (*)</label>
-                        <input asp-for="Name" class="form-control" placeholder="Nhập tên danh mục (ví dụ: Áo Sơ Mi, Quần Jean)..." required />
-                        <span asp-validation-for="Name" class="text-danger small"></span>
-                    </div>
+    <form asp-action="Create" method="post" class="space-y-5">
+        <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm"></div>
 
-                    <div class="mb-3">
-                        <label asp-for="Description" class="form-label">Mô tả chi tiết</label>
-                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập tóm tắt mô tả về nhóm sản phẩm này..."></textarea>
-                        <span asp-validation-for="Description" class="text-danger small"></span>
-                    </div>
-
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-save me-2"></i>Lưu dữ liệu</button>
-                        <a class="btn btn-secondary ms-2" asp-action="Index">Quay lại danh sách</a>
-                    </div>
-                </form>
-            </div>
+        <div>
+            <label asp-for="Name" class="block text-sm font-semibold text-gray-700 mb-1">Tên danh mục (*)</label>
+            <input asp-for="Name" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Nhập tên danh mục (ví dụ: Áo Sơ Mi, Quần Jean)..." required />
+            <span asp-validation-for="Name" class="text-red-500 text-xs mt-1 block"></span>
         </div>
-    </div>
+
+        <div>
+            <label asp-for="Description" class="block text-sm font-semibold text-gray-700 mb-1">Mô tả chi tiết</label>
+            <textarea asp-for="Description" id="Description" rows="4" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Nhập tóm tắt mô tả về nhóm sản phẩm này..."></textarea>
+            <span asp-validation-for="Description" class="text-red-500 text-xs mt-1 block"></span>
+        </div>
+
+        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+            <a asp-action="Index" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-lg text-sm transition">Quay lại danh sách</a>
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg text-sm shadow transition">
+                <i class="fa fa-save mr-1.5"></i>Lưu dữ liệu
+            </button>
+        </div>
+    </form>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('Description', {
+            language: 'vi',
+            filebrowserUploadUrl: '/api/Upload',
+            filebrowserUploadMethod: 'form'
+        });
+    </script>
+}

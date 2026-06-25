@@ -1,4 +1,4 @@
-﻿@model CMS.Data.Entities.Order
+@model CMS.Data.Entities.Order
 
 <div class="px-6 py-6 max-w-4xl mx-auto">
     <div class="flex justify-between items-center mb-6">
@@ -14,7 +14,7 @@
         <div class="bg-white p-4 rounded-xl border border-zinc-200">
             <h4 class="font-bold text-zinc-500 uppercase text-xs mb-2">Trạng thái</h4>
             <span class="px-3 py-1 rounded-full text-sm font-bold bg-zinc-100">
-                @(Model.Status == 0 ? "Chờ duyệt" : Model.Status == 1 ? "Đang giao" : "Đã xong")
+                @(Model.Status == 0 ? "Chờ duyệt" : Model.Status == 1 ? "Đang xử lý" : Model.Status == 2 ? "Đang giao" : Model.Status == 3 ? "Hoàn thành" : "Đã huỷ")
             </span>
         </div>
     </div>
@@ -26,18 +26,29 @@
                     <th class="px-6 py-3 text-left text-xs font-bold text-zinc-500 uppercase">Sản phẩm</th>
                     <th class="px-6 py-3 text-center text-xs font-bold text-zinc-500 uppercase">Số lượng</th>
                     <th class="px-6 py-3 text-right text-xs font-bold text-zinc-500 uppercase">Đơn giá</th>
+                    <th class="px-6 py-3 text-right text-xs font-bold text-zinc-500 uppercase">Thành tiền</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-zinc-200">
+                @{ decimal totalOrderAmount = 0; }
                 @foreach (var item in Model.OrderDetails)
                 {
+                    var subtotal = item.UnitPrice * item.Quantity;
+                    totalOrderAmount += subtotal;
                     <tr>
                         <td class="px-6 py-4 text-sm font-medium text-zinc-900">@item.Product?.Name</td>
                         <td class="px-6 py-4 text-sm text-center">@item.Quantity</td>
-                        <td class="px-6 py-4 text-sm text-right font-bold text-rose-600">@item.UnitPrice.ToString("N0") đ</td>
+                        <td class="px-6 py-4 text-sm text-right">@item.UnitPrice.ToString("N0") đ</td>
+                        <td class="px-6 py-4 text-sm text-right font-bold text-rose-600">@subtotal.ToString("N0") đ</td>
                     </tr>
                 }
             </tbody>
+            <tfoot class="bg-zinc-50">
+                <tr>
+                    <td colspan="3" class="px-6 py-4 text-right font-bold text-zinc-700 uppercase">Tổng cộng đơn hàng:</td>
+                    <td class="px-6 py-4 text-right font-black text-rose-600 text-lg">@totalOrderAmount.ToString("N0") đ</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>

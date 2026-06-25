@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CMS.Data;
 using CMS.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
+namespace CMS.Backend.Controllers;
+
+[Authorize(Roles = "Administrator")]
 public class CustomerController : Controller
 {
     private readonly ApplicationDbContext _context;

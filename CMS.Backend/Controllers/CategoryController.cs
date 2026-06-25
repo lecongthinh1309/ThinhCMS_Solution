@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Sinh vien: Le Cong Thinh
  * MSSV: 2123110063
  * Ngay tao: 14-05-2026
@@ -15,8 +15,8 @@ using System.Linq;
 
 namespace CMS.Backend.Controllers
 {
-    // Cấp quyền cho cả Administrator và Editor vào xem/thêm danh mục giao diện Web
-    [Authorize(Roles = "Administrator,Editor")]
+    // Tiêu chí 21: Toàn bộ Controller Quản trị đều gắn [Authorize]
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;

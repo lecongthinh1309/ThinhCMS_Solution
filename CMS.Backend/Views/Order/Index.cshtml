@@ -1,43 +1,51 @@
-﻿@model IEnumerable<CMS.Data.Entities.Order>
+@model IEnumerable<CMS.Data.Entities.Order>
 
 <div class="px-6 py-4">
     <h2 class="text-xl font-bold mb-4">Danh sách đơn hàng</h2>
     <table class="w-full border-collapse border border-zinc-200">
         <thead class="bg-zinc-50">
             <tr>
-                <th class="border p-2">Mã ĐH</th>
-                <th class="border p-2">Khách hàng</th>
-                <th class="border p-2">Ngày đặt</th>
-                <th class="border p-2">Trạng thái</th>
-                <th class="border p-2">Thao tác</th>
+                <th class="border p-3 text-left text-sm font-semibold text-zinc-600">Mã ĐH</th>
+                <th class="border p-3 text-left text-sm font-semibold text-zinc-600">Khách hàng</th>
+                <th class="border p-3 text-left text-sm font-semibold text-zinc-600">Ngày đặt</th>
+                <th class="border p-3 text-right text-sm font-semibold text-zinc-600">Tổng tiền</th>
+                <th class="border p-3 text-center text-sm font-semibold text-zinc-600">Trạng thái</th>
+                <th class="border p-3 text-center text-sm font-semibold text-zinc-600">Thao tác</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="border p-2">#@item.Id</td>
-                    <td class="border p-2">@item.Customer?.FullName</td>
-                    <td class="border p-2">@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td class="border p-2 text-center">
+                    <td class="border p-3 text-sm font-medium">#@item.Id</td>
+                    <td class="border p-3 text-sm">@item.Customer?.FullName</td>
+                    <td class="border p-3 text-sm">@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="border p-3 text-sm text-right font-bold text-red-600">
+                        @string.Format("{0:N0} ₫", item.OrderDetails?.Sum(x => x.Quantity * x.UnitPrice) ?? 0)
+                    </td>
+                    <td class="border p-3 text-center">
                         @switch (item.Status)
                         {
                             case 0:
-                                <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Chờ duyệt</span>
                                 break;
                             case 1:
-
-                                <span class="badge bg-info">Đang giao</span>
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Đang xử lý</span>
                                 break;
                             case 2:
-
-                                <span class="badge bg-success">Đã xong</span>
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">Đang giao</span>
+                                break;
+                            case 3:
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Hoàn thành</span>
+                                break;
+                            case 4:
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Đã huỷ</span>
                                 break;
                         }
                     </td>
-                    <td class="border p-2 text-center">
-                        <a asp-action="Details" asp-route-id="@item.Id" class="text-indigo-600">Chi tiết</a> |
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="text-amber-600">Sửa</a>
+                    <td class="border p-3 text-center">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="inline-flex items-center px-2 py-1 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">Chi tiết</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="inline-flex items-center px-2 py-1 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-1">Sửa</a>
                     </td>
                 </tr>
             }

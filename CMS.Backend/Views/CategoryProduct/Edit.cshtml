@@ -1,4 +1,4 @@
-﻿@model CMS.Data.Entities.CategoryProduct
+@model CMS.Data.Entities.CategoryProduct
 
 @{
     ViewData["Title"] = "Chỉnh sửa danh mục";
@@ -22,25 +22,33 @@
                     <span asp-validation-for="Name" class="text-xs text-rose-600 mt-1 block"></span>
                 </div>
 
-                <div>
-                    <label asp-for="Description" class="block text-sm font-bold text-zinc-700 mb-2">Mô tả</label>
-                    <textarea asp-for="Description" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" rows="4"></textarea>
-                    <span asp-validation-for="Description" class="text-xs text-rose-600 mt-1 block"></span>
-                </div>
-            </div>
-
-            <div class="mt-8 flex items-center justify-end gap-3 border-t border-zinc-100 pt-6">
-                <a asp-action="Index" class="text-sm font-semibold text-zinc-600 hover:text-zinc-900">Quay lại</a>
-                <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 transition-all">
-                    Lưu thay đổi
-                </button>
-            </div>
-        </form>
+        <div>
+            <label asp-for="Description" class="block text-sm font-bold text-zinc-700 mb-2">Mô tả</label>
+            <textarea asp-for="Description" id="Description" class="w-full rounded-lg border-zinc-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2.5 px-3 border" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-xs text-rose-600 mt-1 block"></span>
+        </div>
     </div>
+
+    <div class="mt-8 flex items-center justify-end gap-3 border-t border-zinc-100 pt-6">
+        <a asp-action="Index" class="text-sm font-semibold text-zinc-600 hover:text-zinc-900">Quay lại</a>
+        <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 transition-all">
+            Lưu thay đổi
+        </button>
+    </div>
+</form>
+</div>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('Description', {
+            language: 'vi',
+            filebrowserUploadUrl: '/api/Upload',
+            filebrowserUploadMethod: 'form'
+        });
+    </script>
 }

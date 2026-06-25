@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Sinh viên: Le Cong Thinh
  * Mã Sinh Viên : 2123110063
  * Lớp: CCQ2311B - Trường Cao Đẳng Công Thương TP.HCM
@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace CMS.Backend.Controllers
 {
-    // 🔒 Ổ KHÓA TỔNG: Đã cập nhật từ "Quản trị viên" sang "Administrator" để khớp chính xác dữ liệu SQL
+    // Tiêu chí 22: Phân quyền [Authorize(Roles="Administrator,Editor")]
     [Authorize(Roles = "Administrator,Editor")]
     public class CategoryProductController : Controller
     {

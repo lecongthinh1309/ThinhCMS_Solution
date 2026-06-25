@@ -1,12 +1,20 @@
-﻿@model IEnumerable<CMS.Data.Entities.Product>
+@model IEnumerable<CMS.Data.Entities.Product>
 
 @{
     ViewData["Title"] = "Quản lý sản phẩm";
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int totalItems = ViewBag.TotalItems ?? 0;
 }
 
 <div class="container mx-auto px-4 mt-6 max-w-6xl">
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800 tracking-wide uppercase">Danh sách sản phẩm</h2>
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-wide uppercase">Danh sách sản phẩm</h2>
+            <p class="text-sm text-gray-500 mt-1">
+                Tổng cộng <strong>@totalItems</strong> sản phẩm — Trang <strong>@currentPage</strong>/@totalPages
+            </p>
+        </div>
         <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow transition duration-200 text-sm">
             + THÊM SẢN PHẨM MỚI
         </a>
@@ -51,4 +59,63 @@
             </tbody>
         </table>
     </div>
+
+    @* ===== THANH PHÂN TRANG ===== *@
+    @if (totalPages > 1)
+    {
+        <div class="flex items-center justify-center gap-2 mt-8 flex-wrap">
+            @* Nút Trước *@
+            @if (currentPage > 1)
+            {
+                <a asp-action="Index" asp-route-page="@(currentPage - 1)"
+                   class="inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-blue-50 hover:border-blue-300 text-sm font-medium transition-all shadow-sm">
+                    <i class="bi bi-chevron-left"></i> Trước
+                </a>
+            }
+            else
+            {
+                <span class="inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-gray-100 border border-gray-200 text-gray-400 text-sm font-medium cursor-not-allowed">
+                    <i class="bi bi-chevron-left"></i> Trước
+                </span>
+            }
+
+            @* Số trang *@
+            @for (int p = 1; p <= totalPages; p++)
+            {
+                if (p == currentPage)
+                {
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600 text-white text-sm font-bold shadow">
+                        @p
+                    </span>
+                }
+                else if (p == 1 || p == totalPages || (p >= currentPage - 2 && p <= currentPage + 2))
+                {
+                    <a asp-action="Index" asp-route-page="@p"
+                       class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-blue-50 hover:border-blue-300 text-sm font-medium transition-all shadow-sm">
+                        @p
+                    </a>
+                }
+                else if (p == currentPage - 3 || p == currentPage + 3)
+                {
+                    <span class="inline-flex items-center justify-center w-10 h-10 text-gray-400 text-sm">...</span>
+                }
+            }
+
+            @* Nút Sau *@
+            @if (currentPage < totalPages)
+            {
+                <a asp-action="Index" asp-route-page="@(currentPage + 1)"
+                   class="inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-blue-50 hover:border-blue-300 text-sm font-medium transition-all shadow-sm">
+                    Sau <i class="bi bi-chevron-right"></i>
+                </a>
+            }
+            else
+            {
+                <span class="inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-gray-100 border border-gray-200 text-gray-400 text-sm font-medium cursor-not-allowed">
+                    Sau <i class="bi bi-chevron-right"></i>
+                </span>
+            }
+        </div>
+        <p class="text-center text-xs text-gray-400 mt-3">Trang @currentPage / @totalPages (@totalItems sản phẩm)</p>
+    }
 </div>

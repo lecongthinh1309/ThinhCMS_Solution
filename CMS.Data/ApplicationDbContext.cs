@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CMS.Data.Entities;
+﻿using CMS.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace CMS.Data
 {
@@ -18,5 +19,7 @@ namespace CMS.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
+        // CẦN BỔ SUNG DÒNG NÀY ĐỂ LIÊN KẾT BẢNG BANNER
+        public DbSet<Banner> Banners { get; set; }
     }
 }

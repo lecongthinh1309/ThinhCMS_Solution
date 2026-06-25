@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+
+using Microsoft.EntityFrameworkCore;
 using CMS.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -11,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 // 1.1. Kết nối Cơ sở dữ liệu SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// 1.1b. Đăng ký dịch vụ Gửi Email
+builder.Services.AddScoped<CMS.Backend.Services.IEmailService, CMS.Backend.Services.EmailService>();
 
 // 1.2. Đăng ký nhận diện Controller kèm cả View .cshtml
 builder.Services.AddControllersWithViews();
@@ -27,7 +31,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Account/AccessDenied"; // Sai quyền (Role) thì đá về đây
     });
 
-// 1.5. CẤU HÌNH CORS - Mở cổng kết nối bảo mật cho ReactJS
+// 1.5. CẤU HÌNH CORS CHUẨN - Mở cổng kết nối bảo mật duy nhất cho ReactJS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -35,7 +39,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:3000") // Cho phép ReactJS ở port 3000 gọi tới
               .AllowAnyHeader()                     // Cho phép mọi loại Header (Content-Type, Authorization...)
               .AllowAnyMethod()                     // Cho phép mọi phương thức HTTP (GET, POST, PUT, DELETE)
-              .AllowCredentials();                  // Hỗ trợ truyền Cookie/Session nếu cần sau này
+              .AllowCredentials();                  // Hỗ trợ truyền Cookie/Session an toàn giữa React và API
     });
 });
 
@@ -44,6 +48,10 @@ var app = builder.Build();
 // ==============================================================
 // 2. KHU VỰC CẤU HÌNH MIDDLEWARE (REQUEST PIPELINE)
 // ==============================================================
+
+// 🌟 QUAN TRỌNG: Kích hoạt CORS TRƯỚC TIÊN - Đảm bảo header CORS có mặt trong MỌI response
+// (kể cả khi server trả về lỗi 500, browser vẫn nhận được CORS header thay vì bị chặn)
+app.UseCors("AllowReactApp");
 
 if (!app.Environment.IsDevelopment())
 {
@@ -55,9 +63,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-// 🌟 VỊ TRÍ QUAN TRỌNG: Kích hoạt CORS ngay sau UseRouting và TRƯỚC các tầng bảo mật
-app.UseCors("AllowReactApp");
 
 // Kích hoạt Middleware bảo mật xác thực danh tính và phân quyền
 app.UseAuthentication();

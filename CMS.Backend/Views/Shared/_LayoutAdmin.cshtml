@@ -1,183 +1,131 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-50">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ThinhCMS Admin</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            overflow-x: hidden;
         }
 
-        .admin-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .admin-sidebar {
-            width: 260px;
-            min-width: 260px;
-            background-color: #212529;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid #2c3136;
-        }
-
-        .sidebar-brand {
-            padding: 20px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            background-color: #1a1d20;
-            border-bottom: 1px solid #2c3136;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 15px 0;
-            margin: 0;
-        }
-
-            .sidebar-menu li {
-                padding: 2px 15px;
-            }
-
-                .sidebar-menu li a {
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    padding: 12px 15px;
-                    color: #adb5bd;
-                    text-decoration: none;
-                    border-radius: 6px;
-                    font-size: 0.95rem;
-                    transition: all 0.2s ease;
-                }
-
-                    .sidebar-menu li a:hover, .sidebar-menu li.active a {
-                        color: #fff;
-                        background-color: #2c3136;
-                        font-weight: 500;
-                    }
-
-        .admin-main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #fdfdfd;
-        }
-
-        .admin-topbar {
-            background-color: #fff;
-            padding: 15px 30px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .admin-content {
-            padding: 30px;
-            flex-grow: 1;
-        }
-
-        .admin-footer {
-            background-color: #fff;
-            padding: 15px 30px;
-            border-top: 1px solid #dee2e6;
+        .active-nav {
+            background: #059669;
+            color: white !important;
         }
     </style>
 </head>
-<body>
+<body class="h-full overflow-hidden text-zinc-900 antialiased">
 
-    <div class="admin-wrapper">
-        <aside class="admin-sidebar">
-            <div class="sidebar-brand"><span class="text-white">ThinhCMS Admin</span></div>
-            <ul class="sidebar-menu">
-                <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
-                    <a asp-controller="Home" asp-action="Index"><i class="bi bi-speedometer2"></i><span>Bảng điều khiển</span></a>
-                </li>
-                <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Category" ? "active" : "")">
-                    <a asp-controller="Category" asp-action="Index"><i class="bi bi-grid-3x3-gap"></i><span>Quản lý Danh mục</span></a>
-                </li>
-                <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Post" ? "active" : "")">
-                    <a asp-controller="Post" asp-action="Index"><i class="bi bi-file-earmark-richtext"></i><span>Quản lý Bài viết</span></a>
-                </li>
+    <div class="flex h-full w-full overflow-hidden">
+        <aside class="flex h-full w-64 flex-col border-r border-zinc-200 bg-white shadow-sm flex-shrink-0">
+            <div class="flex h-16 items-center px-6 border-b border-zinc-100">
+                <i class="bi bi-layers-fill text-emerald-600 text-2xl mr-2"></i>
+                <span class="text-lg font-bold text-zinc-900">Thinh<span class="text-emerald-600">.CMS</span></span>
+            </div>
 
-                @* Phân quyền cho Sản phẩm *@
-                @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
-                {
-                    <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "CategoryProduct" ? "active" : "")">
-                        <a asp-controller="CategoryProduct" asp-action="Index"><i class="bi bi-tags"></i><span>Danh mục Sản phẩm</span></a>
-                    </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Product" ? "active" : "")">
-                        <a asp-controller="Product" asp-action="Index"><i class="bi bi-box-seam"></i><span>Quản lý Sản phẩm</span></a>
-                    </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Order" ? "active" : "")">
-                        <a asp-controller="Order" asp-action="Index"><i class="bi bi-clipboard2-heart"></i><span>Sổ đơn hàng</span></a>
-                    </li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Customer" ? "active" : "")">
-                        <a asp-controller="Customer" asp-action="Index"><i class="bi bi-clipboard2-heart"></i><span>Customer</span></a>
-                    </li>
+            <nav class="flex-1 space-y-1 p-4 overflow-y-auto">
+                @{
+                    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+
+                    // Kiểm tra quyền hạn của người dùng đăng nhập để ẩn/hiện menu
+                    var isAuthorizedForProducts = User.Identity?.IsAuthenticated == true &&
+                    (User.IsInRole("Administrator") ||
+                    User.IsInRole("Editor") ||
+                    User.FindFirst("Role")?.Value == "Administrator" ||
+                    User.FindFirst("Role")?.Value == "Editor");
                 }
 
-                <li class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "User" ? "active" : "")">
-                    <a asp-controller="User" asp-action="Index"><i class="bi bi-people"></i><span>Quản lý Thành viên</span></a>
-                </li>
+                <a asp-controller="Home" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Home" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-speedometer2 text-lg mr-3"></i> Trang chủ
+                </a>
+                <a asp-controller="Category" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Category" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-tags text-lg mr-3"></i> Danh mục
+                </a>
+                <a asp-controller="Post" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Post" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-newspaper text-lg mr-3"></i> Bài viết
+                </a>
+                <a asp-controller="Banner" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Banner" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-images text-lg mr-3"></i> Banner
+                </a>
 
-                @if (User.Identity.IsAuthenticated)
+                @if (isAuthorizedForProducts)
                 {
-                    <li class="mt-4 border-top border-secondary pt-2">
-                        <a asp-controller="Account" asp-action="Logout" class="text-danger fw-semibold">
-                            <i class="bi bi-box-arrow-right text-danger"></i><span>Đăng xuất</span>
-                        </a>
-                    </li>
+                    <a asp-controller="CategoryProduct" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "CategoryProduct" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-collection-fill text-lg mr-3"></i> DM Sản phẩm
+                    </a>
+                    <a asp-controller="Product" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Product" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-box-seam text-lg mr-3"></i> Sản phẩm
+                    </a>
+                    <a asp-controller="Order" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Order" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-clipboard2-heart text-lg mr-3"></i> Sổ đơn hàng
+                    </a>
+                    <a asp-controller="Customer" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "Customer" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                        <i class="bi bi-people text-lg mr-3"></i> Khách hàng
+                    </a>
                 }
-            </ul>
+
+                <a asp-controller="User" asp-action="Index" class="flex items-center rounded-lg px-4 py-2.5 text-sm font-medium no-underline transition-all duration-200 @(currentController == "User" ? "active-nav" : "text-zinc-600 hover:bg-emerald-50 hover:text-emerald-700")">
+                    <i class="bi bi-person-gear text-lg mr-3"></i> Người dùng
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-zinc-100">
+                <div class="bg-zinc-900 rounded-xl p-4 text-white shadow-inner">
+                    <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold mb-1">Sinh viên thực hiện</p>
+                    <p class="font-bold text-sm text-zinc-100">Lê Công Thịnh</p>
+                    <p class="text-xs text-zinc-400 mt-0.5">MSSV: 2123110063</p>
+                    <p class="text-[11px] text-emerald-400 font-medium mt-2 flex items-center gap-1">
+                        <i class="bi bi-gradient"></i> CCQ2311B
+                    </p>
+                </div>
+            </div>
         </aside>
 
-        <main class="admin-main">
-            <header class="admin-topbar d-flex justify-content-between align-items-center shadow-sm">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb m-0 bg-transparent p-0">
-                        <li class="breadcrumb-item text-muted">@ViewContext.RouteData.Values["Controller"]</li>
-                        <li class="breadcrumb-item active text-dark">@ViewData["Title"]</li>
-                    </ol>
-                </nav>
+        <div class="flex flex-1 flex-col h-full overflow-hidden bg-zinc-50">
+            <header class="flex h-16 items-center justify-between bg-white border-b border-zinc-200 px-8 flex-shrink-0">
+                <h1 class="text-lg font-semibold text-zinc-800">@ViewData["Title"]</h1>
 
-                <div class="d-flex align-items-center gap-3">
-                    @if (User.Identity.IsAuthenticated)
+                <div class="flex items-center gap-3">
+                    @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <div class="text-end small me-2">
-                            <span class="d-block text-dark fw-semibold">Chào, @User.FindFirst("FullName")?.Value</span>
-                            <span class="text-muted d-block" style="font-size: 0.8rem;">Quyền: @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</span>
+                        // Bộ lọc động quét dữ liệu từ Cookie Identity
+                        var fullName = User.FindFirst("FullName")?.Value ?? User.Identity.Name ?? "Thinh Le Cong";
+                        var roleName = User.FindFirst("Role")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "Administrator";
+
+                        <div class="flex items-center text-sm gap-4">
+                            <div class="flex items-center gap-3 bg-zinc-50 border border-zinc-200/80 px-4 py-1.5 rounded-full">
+                                <div class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                                    <i class="bi bi-person-fill text-sm"></i>
+                                </div>
+                                <div class="flex flex-col text-left">
+                                    <span class="text-xs font-bold text-zinc-800 leading-tight">@fullName</span>
+                                    <span class="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded mt-0.5 w-max border border-emerald-200/50">
+                                        🔑 @roleName
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="h-6 w-px bg-zinc-200"></div>
+
+                            <a asp-controller="Account" asp-action="Logout" class="flex items-center gap-1.5 text-zinc-500 hover:text-red-600 font-medium transition-colors no-underline text-sm">
+                                <i class="bi bi-box-arrow-right text-base"></i>
+                                <span>Đăng xuất</span>
+                            </a>
                         </div>
                     }
-                    <div class="d-flex align-items-center border-start ps-3">
-                        <span class="badge bg-light text-dark border me-2 px-3 py-2 fw-semibold" style="font-size: 0.9rem;">Lê Công Thịnh</span>
-                        <span class="text-muted fw-bold small">2123110063</span>
-                    </div>
                 </div>
             </header>
 
-            <div class="admin-content">
+            <main class="flex-1 overflow-y-auto p-6">
                 @RenderBody()
-            </div>
-
-            <footer class="admin-footer text-muted">
-                <div class="d-flex justify-content-between align-items-center small">
-                    <span>&copy; 2026 - <span class="fw-semibold text-dark">Cao đẳng Công Thương TPHCM</span></span>
-                </div>
-            </footer>
-        </main>
+            </main>
+        </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

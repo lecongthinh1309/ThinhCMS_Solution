@@ -35,6 +35,7 @@ namespace CMS.Data.Entities
         [Required]
         public string Password { get; set; } // Lưu mật khẩu thô theo yêu cầu tối giản
 
+        public string PasswordHash { get; set; }
         public virtual ICollection<Order>? Orders { get; set; }
     }
 }

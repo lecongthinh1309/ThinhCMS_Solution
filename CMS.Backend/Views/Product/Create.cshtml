@@ -1,4 +1,4 @@
-﻿@model CMS.Data.Entities.Product
+@model CMS.Data.Entities.Product
 
 @{
     ViewData["Title"] = "Thêm sản phẩm mới";
@@ -12,7 +12,7 @@
 
         <div>
             <label asp-for="CategoryProductId" class="block text-sm font-semibold text-gray-700 mb-1">Danh mục sản phẩm</label>
-            <select asp-for="CategoryProductId" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" asp-items="ViewBag.CategoryProducts">
+            <select asp-for="CategoryProductId" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" asp-items="ViewBag.CategoriesProducts">
                 <option value="">-- Chọn danh mục --</option>
             </select>
             <span asp-validation-for="CategoryProductId" class="text-red-500 text-xs mt-1 block"></span>
@@ -44,7 +44,7 @@
 
         <div>
             <label asp-for="Description" class="block text-sm font-semibold text-gray-700 mb-1">Mô tả sản phẩm</label>
-            <textarea asp-for="Description" rows="4" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Nhập mô tả chi tiết..."></textarea>
+            <textarea asp-for="Description" id="Description" rows="4" class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Nhập mô tả chi tiết..."></textarea>
             <span asp-validation-for="Description" class="text-red-500 text-xs mt-1 block"></span>
         </div>
 
@@ -54,3 +54,14 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('Description', {
+            language: 'vi',
+            filebrowserUploadUrl: '/api/Upload',
+            filebrowserUploadMethod: 'form'
+        });
+    </script>
+}

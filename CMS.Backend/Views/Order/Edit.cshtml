@@ -1,4 +1,4 @@
-﻿@model CMS.Data.Entities.Order
+@model CMS.Data.Entities.Order
 
 <div class="px-6 py-6 max-w-lg mx-auto">
     <h2 class="text-2xl font-bold text-zinc-900 mb-6">Cập nhật đơn hàng #@Model.Id</h2>
@@ -10,14 +10,21 @@
             <label class="block text-sm font-bold text-zinc-700 mb-2">Trạng thái đơn hàng</label>
             <select asp-for="Status" class="w-full p-2.5 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
                 <option value="0">Chờ duyệt</option>
-                <option value="1">Đang giao</option>
-                <option value="2">Đã xong</option>
+                <option value="1">Đang xử lý</option>
+                <option value="2">Đang giao</option>
+                <option value="3">Hoàn thành</option>
+                <option value="4">Đã huỷ</option>
             </select>
+        </div>
+
+        <div class="mb-4 flex items-center">
+            <input type="checkbox" id="sendEmail" name="sendEmail" value="true" class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
+            <label for="sendEmail" class="ml-2 text-sm font-medium text-gray-900">Gửi email thông báo cập nhật cho khách hàng</label>
         </div>
 
         <div class="mb-6">
             <label class="block text-sm font-bold text-zinc-700 mb-2">Ghi chú</label>
-            <textarea asp-for="Notes" class="w-full p-2.5 border border-zinc-300 rounded-lg" rows="3"></textarea>
+            <textarea asp-for="Notes" id="Notes" class="w-full p-2.5 border border-zinc-300 rounded-lg" rows="3"></textarea>
         </div>
 
         <div class="flex gap-4">
@@ -26,3 +33,12 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('Notes', {
+            language: 'vi'
+        });
+    </script>
+}

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Sinh vien: Le Cong Thinh
  * MSSV: 2123110063
  * Ngay tao: 14-05-2026
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CMS.Backend.Controllers
 {
@@ -103,29 +104,39 @@ namespace CMS.Backend.Controllers
         // ===================================================
         // 1. CHỨC NĂNG: TRANG DANH SÁCH BÀI VIẾT (INDEX) - Ai đăng nhập cũng được xem
         // ===================================================
-        public IActionResult Index(int? id)
+        public IActionResult Index(int? id, int page = 1)
         {
-            List<Post> data;
+            const int pageSize = 9;
+            IQueryable<Post> query;
 
             if (id == null)
             {
-                data = _context.Posts
+                query = _context.Posts
                                .Include(p => p.Category)
-                               .OrderByDescending(p => p.Id)
-                               .ToList();
+                               .OrderByDescending(p => p.Id);
                 ViewBag.CurrentCategoryName = "Tất cả bài viết";
             }
             else
             {
-                data = _context.Posts
+                query = _context.Posts
                                .Where(p => p.CategoryId == id)
                                .Include(p => p.Category)
-                               .OrderByDescending(p => p.CreatedDate)
-                               .ToList();
+                               .OrderByDescending(p => p.CreatedDate);
 
                 var cat = _context.Categories.Find(id);
                 ViewBag.CurrentCategoryName = cat != null ? "Danh mục: " + cat.Name : "Danh mục không tồn tại";
             }
+
+            int totalItems = query.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
+
+            var data = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.CategoryId = id;
 
             return View(data);
         }

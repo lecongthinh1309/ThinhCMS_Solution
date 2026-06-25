@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CMS.Data;
 using CMS.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CMS.Backend.Controllers
 {
+    [Authorize(Roles = "Administrator,Editor")]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,13 +22,26 @@ namespace CMS.Backend.Controllers
         // ===================================================
         // 1. XEM DANH SÁCH SẢN PHẨM (INDEX)
         // ===================================================
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            // Eager loading để lấy kèm thông tin Danh mục hiển thị ra bảng
-            var products = await _context.Products
+            const int pageSize = 10;
+            var query = _context.Products
                 .Include(p => p.CategoryProduct)
-                .OrderByDescending(p => p.Id)
+                .OrderByDescending(p => p.Id);
+
+            int totalItems = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            page = Math.Max(1, Math.Min(page, Math.Max(1, totalPages)));
+
+            var products = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalItems = totalItems;
+
             return View(products);
         }
 

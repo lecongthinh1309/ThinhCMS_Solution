@@ -1,11 +1,17 @@
-﻿import axiosClient from '../api/axiosClient';
+import axiosClient from '../api/axiosClient';
 
 const categoryProductService = {
-    // Gọi tới Endpoint: https://localhost:7208/api/CategoryProducts
-    getAll: () => {
-        const url = '/CategoryProducts';
+    /**
+     * Hàm lấy toàn bộ danh mục SẢN PHẨM từ Backend
+     * Endpoint này kết nối tới CategoryProductController trong ASP.NET Core
+     */
+    getAllCategoryProducts: () => {
+        // Đường dẫn định tuyến khớp chính xác với cấu trúc định tuyến [Route("api/[controller]")] của Backend
+        const url = '/categoriesproducts';
         return axiosClient.get(url);
     }
 };
 
 export default categoryProductService;
+
+
