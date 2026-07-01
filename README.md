@@ -3,14 +3,14 @@
 Đây là kho lưu trữ mã nguồn cho dự án Hệ thống Quản trị Nội dung (CMS). Dự án được phát triển trong quá trình học tập thực hành.
 
 ## 👥 Thông tin sinh viên
-- **Họ và tên:** [Điền tên của bạn vào đây]
-- **Mã sinh viên:** [Điền mã SV vào đây]
-- **Lớp/Môn học:** [Điền tên môn học]
+- **Họ và tên:** Lê Công Thịnh
+- **Mã sinh viên:** 2123110063
+- **Lớp/Môn học:** CCQ2311B
 
 ## 🛠 Công nghệ sử dụng
 - **Backend:** .NET / C# (ASP.NET Core Web API)
-- **Frontend:** [Ghi công nghệ frontend của bạn, ví dụ: ReactJS / VueJS / Angular]
-- **Database:** [Ghi cơ sở dữ liệu, ví dụ: SQL Server / MySQL]
+- **Frontend:**  ReactJS
+- **Database:** SQL Server
 
 ---
 
